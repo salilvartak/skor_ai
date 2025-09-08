@@ -18,6 +18,7 @@ import SovaSun from "./pages/lineup/sova-sunset";
 import Submission from "./pages/submissionform"; 
 import TeamsPage from "./pages/Teams"; // Import the new TeamsPage
 import TeamDetailsPage from "./pages/TeamDetails"; // Import the new TeamDetailsPage
+import TournamentDetailsPage from "./pages/TournamentDetails"; // Import the new TournamentDetailsPage
 import { auth } from './firebase';
 import { useEffect } from "react";
 
@@ -64,6 +65,7 @@ const App = () => (
           <Route path="/profile-setup" element={<ProfileSetup />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/tournaments" element={<Tournament />} />
+          <Route path="/tournament/:id" element={<TournamentDetailsPage />} />
           <Route path="/app" element={<Riot />} />
           <Route path="/live-match" element={<LiveMatchPage />} /> 
           <Route path="/dashboard/guide" element={<ValorantSelector />} /> 
@@ -80,3 +82,4 @@ const App = () => (
 );
 
 export default App;
+

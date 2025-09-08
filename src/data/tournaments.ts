@@ -1,158 +1,168 @@
-// src/data/tournaments.ts
 export interface Tournament {
   id: number;
   title: string;
-  game: string;
+  game: 'Valorant' | 'CS2' | 'Dota 2' | 'BGMI';
   prize: string;
   participants: number;
-  timeLeft: string;
+  startDate: string;
   status: 'live' | 'upcoming' | 'ended';
   link: string;
+  image: string;
+  region: 'Global' | 'EMEA' | 'Americas' | 'APAC' | 'China';
+  skillBracket: 'Pro' | 'Semi-Pro' | 'Beginner';
+  format: 'LAN' | 'Online';
+  eventType: 'Pro' | 'Community' | 'Qualifier' | 'Livestream'; // New variable
 }
 
 export const allTournaments: Tournament[] = [
- {
+  {
     id: 1,
     title: "VCT 2025: Pacific Stage 2",
     game: "Valorant",
-    prize: "$250,000 USD",
-    participants: 10, // Common number of teams in VCT regional leagues
-    timeLeft: "2025-08-31 23:59", // End Date
+    prize: "$250,000",
+    participants: 10,
+    startDate: "2025-08-15",
     status: "live",
-    link: "https://www.vlr.gg/events"
+    link: "/live-match",
+    image: "https://static.gosugamers.net/a8/3f/51/f5cc81ee017c05d77dd3004fca8800aa8e6f335b53d9e1f2263d0e2f41.webp?w=1600",
+    region: 'APAC',
+    skillBracket: 'Pro',
+    format: 'LAN',
+    eventType: 'Livestream'
   },
   {
     id: 2,
-    title: "VCT 2025: EMEA Stage 2",
-    game: "Valorant",
-    prize: "$250,000 USD",
-    participants: 10, // Common number of teams in VCT regional leagues
-    timeLeft: "2025-08-31 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
+    title: "Esports World Cup 2025",
+    game: "Dota 2",
+    prize: "$10,000,000",
+    participants: 16,
+    startDate: "2025-09-01",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://esportsinsider.com/wp-content/uploads/2025/04/Screenshot-2025-04-15-165049.png",
+    region: 'Global',
+    skillBracket: 'Pro',
+    format: 'LAN',
+    eventType: 'Pro'
   },
   {
     id: 3,
-    title: "VCT 2025: China Stage 2",
-    game: "Valorant",
-    prize: "TBD",
-    participants: 10, // Common number of teams in VCT regional leagues
-    timeLeft: "2025-08-24 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
+    title: "Skyesports Championship",
+    game: "CS2",
+    prize: "$150,000",
+    participants: 12,
+    startDate: "2025-09-10",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://esportsinsider.com/wp-content/uploads/2024/10/skyesports-championship-large.jpg",
+    region: 'APAC',
+    skillBracket: 'Pro',
+    format: 'Online',
+    eventType: 'Pro'
   },
   {
     id: 4,
-    title: "VCT 2025: Americas Stage 2",
-    game: "Valorant",
-    prize: "$250,000 USD",
-    participants: 10, // Common number of teams in VCT regional leagues
-    timeLeft: "2025-09-01 23:59", // End Date
+    title: "BGMI India Series (BGIS)",
+    game: "BGMI",
+    prize: "₹2,00,00,000",
+    participants: 32,
+    startDate: "2025-08-20",
     status: "live",
-    link: "https://www.vlr.gg/events"
+    link: "/live-match",
+    image: "https://afkgaming.com/mobileesports/news/bgis-2024-format-dates-registration-prize-pool-distribution-and-more",
+    region: 'APAC',
+    skillBracket: 'Pro',
+    format: 'LAN',
+    eventType: 'Livestream'
   },
   {
     id: 5,
-    title: "Challengers 2025: North America ACE Stage 3",
+    title: "VCT 2025: EMEA Stage 2",
     game: "Valorant",
-    prize: "$61,500 USD",
-    participants: 12, // Typical Challengers participants
-    timeLeft: "2025-09-04 23:59", // End Date
+    prize: "$250,000",
+    participants: 10,
+    startDate: "2025-08-18",
     status: "live",
-    link: "https://www.vlr.gg/events"
+    link: "/live-match",
+    image: "https://i.ytimg.com/vi/VgHMtZBWLlk/hqdefault.jpg?v=6802c018",
+    region: 'EMEA',
+    skillBracket: 'Pro',
+    format: 'LAN',
+    eventType: 'Livestream'
   },
   {
     id: 6,
-    title: "CONTEST SUMMER CUP 2025",
+    title: "College Gaming League",
     game: "Valorant",
-    prize: "$1,144 USD",
-    participants: 8, // Estimated for smaller cup
-    timeLeft: "2025-08-30 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
+    prize: "$5,000",
+    participants: 64,
+    startDate: "2025-10-01",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://esportsinsider.com/wp-content/uploads/2025/07/PlayVS-College-League--large.png",
+    region: 'Americas',
+    skillBracket: 'Beginner',
+    format: 'Online',
+    eventType: 'Community'
   },
   {
     id: 7,
-    title: "Challengers League 2025: Japan Finals",
-    game: "Valorant",
-    prize: "$32,404 USD",
-    participants: 8, // Estimated for finals
-    timeLeft: "2025-08-24 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
+    title: "IEM Chengdu 2025",
+    game: "CS2",
+    prize: "$250,000",
+    participants: 16,
+    startDate: "2025-09-05",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://admin.esports.gg/wp-content/uploads/2024/01/IEM-Chengdu.jpg",
+    region: 'China',
+    skillBracket: 'Pro',
+    format: 'LAN',
+    eventType: 'Pro'
   },
   {
     id: 8,
-    title: "Spike Tour 2025: Split 2",
-    game: "Valorant",
-    prize: "$4,096 USD",
-    participants: 16, // Estimated for a tour
-    timeLeft: "2025-08-24 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
+    title: "The International 2025",
+    game: "Dota 2",
+    prize: "$15,000,000",
+    participants: 20,
+    startDate: "2025-10-10",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://clan.fastly.steamstatic.com/images/3703047/6c52d654ed6cf25f7e3f548e729c93c86e414aa7.png",
+    region: 'Global',
+    skillBracket: 'Pro',
+    format: 'LAN',
+    eventType: 'Pro'
   },
   {
     id: 9,
-    title: "Challengers 2025: Southeast Asia Split 3",
+    title: "Valorant Game Changers NA",
     game: "Valorant",
-    prize: "$50,000 USD",
-    participants: 12, // Typical Challengers participants
-    timeLeft: "2025-09-07 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
+    prize: "$50,000",
+    participants: 8,
+    startDate: "2025-09-12",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://cdn.sanity.io/images/dsfx7636/news/52cf9139eac80dad75e48f3f0e2f8d580739c2eb-1920x1080.jpg",
+    region: 'Americas',
+    skillBracket: 'Semi-Pro',
+    format: 'Online',
+    eventType: 'Qualifier'
   },
   {
     id: 10,
-    title: "Challengers 2025: Korea WDG Stage 3",
-    game: "Valorant",
-    prize: "$31,634 USD",
-    participants: 12, // Typical Challengers participants
-    timeLeft: "2025-08-22 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
-  },
-  {
-    id: 11,
-    title: "The Major Six 2025",
-    game: "Valorant",
-    prize: "$18,121 USD",
-    participants: 6, // Title suggests 6
-    timeLeft: "2025-08-30 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
-  },
-  {
-    id: 12,
-    title: "Game Changers 2025: North America Stage 2",
-    game: "Valorant",
-    prize: "$60,000 USD",
-    participants: 8, // Typical GC participants
-    timeLeft: "2025-10-12 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
-  },
-  {
-    id: 13,
-    title: "Game Changers 2025: LATAM Main Event",
-    game: "Valorant",
-    prize: "$74,704 USD",
-    participants: 8, // Typical GC participants
-    timeLeft: "2025-09-11 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
-  },
-  {
-    id: 14,
-    title: "Bell Esports Challenge 2025",
-    game: "Valorant",
-    prize: "$6,572 USD",
-    participants: 16, // Estimated
-    timeLeft: "2025-08-23 23:59", // End Date
-    status: "live",
-    link: "https://www.vlr.gg/events"
-  },
-
-  // Upcoming Tournaments
- 
-
+    title: "Local LAN Scrims",
+    game: "CS2",
+    prize: "$1,000",
+    participants: 8,
+    startDate: "2025-09-15",
+    status: "upcoming",
+    link: "/submission",
+    image: "https://img-cdn.hltv.org/gallerypicture/B0nnWjSrSuhhKSQUfI6B5C.png?ixlib=java-2.1.0&w=1200&s=83a9703dadb51e47877ce0704a730f0d",
+    region: 'EMEA',
+    skillBracket: 'Beginner',
+    format: 'LAN',
+    eventType: 'Community'
+  }
 ];
