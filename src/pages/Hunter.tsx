@@ -112,28 +112,28 @@ const FilterSidebar = ({ filters, setFilters, games, regions, skillBrackets, tou
           <label className="text-sm font-medium text-white/70 block mb-2">Region</label>
           <Select onValueChange={(value) => setFilters(f => ({ ...f, region: value }))} value={filters.region}>
             <SelectTrigger className="w-full bg-white/10 border-white/20 text-white"><SelectValue placeholder="Region" /></SelectTrigger>
-            <SelectContent>{regions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
+            <SelectContent className='bg-gray-900/95 text-white'>{regions.map(r => <SelectItem key={r} value={r}>{r}</SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div>
           <label className="text-sm font-medium text-white/70 block mb-2">Skill Bracket</label>
           <Select onValueChange={(value) => setFilters(f => ({ ...f, skillBracket: value }))} value={filters.skillBracket}>
             <SelectTrigger className="w-full bg-white/10 border-white/20 text-white"><SelectValue placeholder="Skill Bracket" /></SelectTrigger>
-            <SelectContent>{skillBrackets.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
+            <SelectContent className='bg-gray-900/95 text-white'>{skillBrackets.map(s => <SelectItem key={s} value={s}>{s}</SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div>
           <label className="text-sm font-medium text-white/70 block mb-2">Tournament Type</label>
           <Select onValueChange={(value) => setFilters(f => ({ ...f, type: value }))} value={filters.type}>
             <SelectTrigger className="w-full bg-white/10 border-white/20 text-white"><SelectValue placeholder="Tournament Type" /></SelectTrigger>
-            <SelectContent>{tournamentTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
+            <SelectContent className='bg-gray-900/95 text-white'>{tournamentTypes.map(t => <SelectItem key={t} value={t}>{t}</SelectItem>)}</SelectContent>
           </Select>
         </div>
         <div>
           <label className="text-sm font-medium text-white/70 block mb-2">Timeline</label>
           <Select onValueChange={(value) => setFilters(f => ({ ...f, timeline: value }))} value={filters.timeline}>
             <SelectTrigger className="w-full bg-white/10 border-white/20 text-white"><SelectValue placeholder="Timeline" /></SelectTrigger>
-            <SelectContent>
+            <SelectContent className='bg-gray-900/95 text-white'>
               <SelectItem value="all">All Time</SelectItem>
               <SelectItem value="today">Today</SelectItem>
               <SelectItem value="weekend">This Weekend</SelectItem>
