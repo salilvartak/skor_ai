@@ -1,4 +1,5 @@
 import React, { useState, useMemo } from 'react';
+import { Link } from 'react-router-dom'; // Make sure to import Link
 import { Header } from '../components/Header';
 import {
   Carousel,
@@ -199,12 +200,14 @@ function HunterPage() {
               <CarouselContent className="-ml-4">
                 {filteredTournaments.filter(t => t.eventType === 'Pro' || t.eventType === 'Community').map(t => (
                   <CarouselItem key={t.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <TournamentCard tournament={t} />
+                    <Link to={`/pro-details/${t.id}`}>
+                      <TournamentCard tournament={t} />
+                    </Link>
                   </CarouselItem>
                 ))}
               </CarouselContent>
               <CarouselPrevious className="absolute -left-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
-<CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
+              <CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
             </Carousel>
           </section>
 
@@ -214,12 +217,14 @@ function HunterPage() {
               <CarouselContent className="-ml-4">
                 {filteredTournaments.filter(t => t.eventType === 'Livestream').map(t => (
                   <CarouselItem key={t.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <TournamentCard tournament={t} />
+                    <Link to={`/livestream-details/${t.id}`}>
+                      <TournamentCard tournament={t} />
+                    </Link>
                   </CarouselItem>
                 ))}
               </CarouselContent>
               <CarouselPrevious className="absolute -left-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
-<CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
+              <CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
             </Carousel>
           </section>
           
@@ -229,12 +234,14 @@ function HunterPage() {
               <CarouselContent className="-ml-4">
                 {filteredTournaments.filter(t => t.skillBracket === 'Beginner' && t.eventType === 'Community').map(t => (
                   <CarouselItem key={t.id} className="md:basis-1/2 lg:basis-1/3 pl-4">
-                    <TournamentCard tournament={t} />
+                    <Link to={`/amateur-details/${t.id}`}>
+                      <TournamentCard tournament={t} />
+                    </Link>
                   </CarouselItem>
                 ))}
               </CarouselContent>
               <CarouselPrevious className="absolute -left-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
-<CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
+              <CarouselNext className="absolute -right-12 top-1/2 -translate-y-1/2 hidden md:inline-flex bg-white/10 border-white/20 text-white hover:bg-white/20" />
             </Carousel>
           </section>
 
