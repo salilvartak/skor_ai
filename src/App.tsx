@@ -32,16 +32,18 @@ function App() {
       <Route path="/chat" element={<Chat />} />
       <Route path="/profile" element={<Profile />} />
       <Route path="/lineup/sova-sunset" element={<SovaSunset />} />
-      <Route path="*" element={<NotFound />} />
       <Route path="/teams" element={<Teams />} />
       <Route path="/teams/:id" element={<TeamDetails />} />
       <Route path="/tournaments" element={<Tournaments />} />
       <Route path="/tournaments/:id" element={<TournamentDetails />} />
       <Route path="/live" element={<LiveMatchPage />} />
-      <Route path="/hunter" element={<Hunter />} />
+      <Route path="/dashboard/hunter" element={<Hunter />} />
       <Route path="/pro-details/:id" element={<ProDetails />} />
       <Route path="/livestream-details/:id" element={<LivestreamDetails />} />
       <Route path="/amateur-details/:id" element={<AmateurDetails />} />
+
+      {/* Move this route to the end */}
+      <Route path="*" element={<NotFound />} />
     </Routes>
   );
 }
