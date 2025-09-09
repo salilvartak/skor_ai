@@ -1,0 +1,12 @@
+{
+  "rewrites": [
+    {
+      "source": "/api/:path*",
+      "destination": "http://65.0.116.163:8000/api/:path*"
+    },
+    {
+      "source": "/((?!api/|_next/|assets/|static/|favicon.ico|sw.js).*)",
+      "destination": "/index.html"
+    }
+  ]
+}
