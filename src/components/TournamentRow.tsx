@@ -1,0 +1,129 @@
+import { useRef, useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
+import TournamentCard from './TournamentCard';
+import TournamentModal from './TournamentModal';
+
+interface Tournament {
+  id: string;
+  title: string;
+  image: string;
+  category: string;
+  prizePool: string;
+  participants: number;
+  status: 'live' | 'upcoming' | 'registration' | 'ended';
+  startDate?: string;
+  duration?: string;
+}
+
+interface TournamentRowProps {
+  title: string;
+  tournaments: Tournament[];
+  showSeeAll?: boolean;
+}
+
+const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowProps) => {
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(true);
+  const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const scroll = (direction: 'left' | 'right') => {
+    if (!scrollRef.current) return;
+    
+    const scrollAmount = 320; // Roughly 1 card width + gap
+    const newScrollLeft = scrollRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
+    
+    scrollRef.current.scrollTo({
+      left: newScrollLeft,
+      behavior: 'smooth'
+    });
+  };
+
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    
+    const { scrollLeft, scrollWidth, clientWidth } = scrollRef.current;
+    setCanScrollLeft(scrollLeft > 0);
+    setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
+  };
+
+  const handleTournamentClick = (tournament: Tournament) => {
+    setSelectedTournament(tournament);
+    setIsModalOpen(true);
+  };
+
+  return (
+    <section className="py-4">
+      <div className="px-4 lg:px-8">
+        {/* Section Header */}
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xl font-bold text-foreground">{title}</h2>
+          {showSeeAll && (
+            <Button 
+              variant="ghost" 
+              className="text-muted-foreground hover:text-black group"
+            >
+              See All
+              <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+            </Button>
+          )}
+        </div>
+
+        {/* Tournament Cards Container */}
+        <div className="relative group">
+          {/* Left Arrow */}
+          {canScrollLeft && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-background/80 hover:bg-background/90 backdrop-blur-sm border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              onClick={() => scroll('left')}
+            >
+              <ChevronLeft className="h-6 w-6" />
+            </Button>
+          )}
+
+          {/* Right Arrow */}
+          {canScrollRight && (
+            <Button
+              variant="ghost"
+              size="icon"
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-background/80 hover:bg-background/90 backdrop-blur-sm border border-border/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+              onClick={() => scroll('right')}
+            >
+              <ChevronRight className="h-6 w-6" />
+            </Button>
+          )}
+
+          {/* Scrollable Cards */}
+          <div
+            ref={scrollRef}
+            onScroll={handleScroll}
+            className="flex space-x-3 overflow-x-auto scrollbar-hide scroll-smooth pb-2"
+            style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+          >
+            {tournaments.map((tournament) => (
+              <div key={tournament.id} className="flex-shrink-0">
+                <TournamentCard 
+                  tournament={tournament} 
+                  onClick={() => handleTournamentClick(tournament)}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Tournament Modal */}
+      <TournamentModal 
+        tournament={selectedTournament}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+      />
+    </section>
+  );
+};
+
+export default TournamentRow;

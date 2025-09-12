@@ -1,45 +1,87 @@
-import { Button } from "@/components/ui/button";
-import { Search, User, Settings } from "lucide-react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Search, Bell, User, Menu } from 'lucide-react';
 
 export const Header = () => {
-  return (
-    <header className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/80 backdrop-blur-sm">
-      <div className="container relative mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo */}
-          <div className="flex items-center space-x-4">
-            <img src="/assets/logo.png" alt="Logo" className="h-8" />
-          </div>
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
 
-          {/* Actions */}
+  return (
+    <header className="fixed top-0 left-0 right-0 z-50 backdrop-blur-sm ">
+      <div className="flex items-center justify-between px-6 py-4">
+        {/* Logo and Navigation */}
+        <div className="flex items-center space-x-8">
           <div className="flex items-center space-x-2">
-            <Link to="/setting" className="group flex flex-col items-center gap-1">
-            <Button variant="ghost" size="icon" className="text-white hover:text-black">
-              <Settings className="h-5 w-5" />
-            </Button>
-            </Link>
-            <Link to="/profile" className="group flex flex-col items-center gap-1">
-            <Button variant="ghost" size="icon" className="text-white hover:text-black">
-              <User className="h-5 w-5" />
-            </Button>
-            </Link>
-            <Button className="bg-accent hover:bg-accent/90 text-primary-foreground">
-              Connect Wallet
-            </Button>
+            
+            <h1 className="text-xl font-bold text-foreground">
+              <img src="/assets/logo.png" alt="Sportify" className="h-12" />
+            </h1>
           </div>
+          
+          {/* Navigation Menu */}
+          <nav className="hidden md:flex items-center space-x-6">
+            <Button variant="ghost" className="text-white hover:text-black">
+              Tournaments
+            </Button>
+            <Button variant="ghost" className="text-white hover:text-black">
+              Live
+            </Button>
+            <Button variant="ghost" className="text-white hover:text-black">
+              Upcoming
+            </Button>
+            <Button variant="ghost" className="text-white hover:text-black">
+              My Events
+            </Button>
+          </nav>
         </div>
 
-        {/* Absolutely Centered Search Bar */}
-        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md">
+        {/* Right Side Actions */}
+        <div className="flex items-center space-x-4">
+          {/* Search */}
           <div className="relative">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-accent w-5 h-5 z-20 pointer-events-none" />
-            <input
-              type="search"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 rounded-full bg-gray-800/40 backdrop-blur-md text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-accent transition z-10"
-            />
+            {isSearchOpen ? (
+              <div className="flex items-center space-x-2">
+                <Input
+                  placeholder="Search tournaments..."
+                  className="w-64 bg-[#22252a] border-border focus:border-primary"
+                  autoFocus
+                  onBlur={() => setIsSearchOpen(false)}
+                />
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={() => setIsSearchOpen(false)}
+                >
+                  <Search className="h-5 w-5" />
+                </Button>
+              </div>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsSearchOpen(true)}
+                className="hover:bg-accent/80"
+              >
+                <Search className="h-5 w-5 text-white" />
+              </Button>
+            )}
           </div>
+
+          {/* Notifications */}
+          <Button variant="ghost" size="icon" className="hover:bg-accent/80 relative hover:text-black">
+            <Bell className="h-5 w-5 text-white" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-accent rounded-full"></span>
+          </Button>
+
+          {/* User Profile */}
+          <Button variant="ghost" size="icon" className="hover:bg-accent/80 ">
+            <User className="h-5 w-5 text-white " />
+          </Button>
+
+          {/* Mobile Menu */}
+          <Button variant="ghost" size="icon" className="md:hidden hover:bg-accent/80 hover:text-black">
+            <Menu className="h-5 w-5 text-white" />
+          </Button>
         </div>
       </div>
     </header>

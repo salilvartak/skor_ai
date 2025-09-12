@@ -1,168 +1,292 @@
+import tournament1 from '@/assets/tournament-1.jpg';
+import tournament2 from '@/assets/tournament-2.jpg';
+import tournament3 from '@/assets/tournament-3.jpg';
+
 export interface Tournament {
-  id: number;
+  id: string;
   title: string;
-  game: 'Valorant' | 'CS2' | 'Dota 2' | 'BGMI';
-  prize: string;
-  participants: number;
-  startDate: string;
-  status: 'live' | 'upcoming' | 'ended';
-  link: string;
   image: string;
-  region: 'Global' | 'EMEA' | 'Americas' | 'APAC' | 'China';
-  skillBracket: 'Pro' | 'Semi-Pro' | 'Beginner';
-  format: 'LAN' | 'Online';
-  eventType: 'Pro' | 'Community' | 'Qualifier' | 'Livestream'; // New variable
+  category: string;
+  prizePool: string;
+  participants: number;
+  status: 'live' | 'upcoming' | 'registration' | 'ended';
+  startDate?: string;
+  duration?: string;
 }
 
-export const allTournaments: Tournament[] = [
+export const trendingTournaments: Tournament[] = [
   {
-    id: 1,
-    title: "VCT 2025: Pacific Stage 2",
-    game: "Valorant",
-    prize: "$250,000",
-    participants: 10,
-    startDate: "2025-08-15",
-    status: "live",
-    link: "/live-match",
-    image: "https://static.gosugamers.net/a8/3f/51/f5cc81ee017c05d77dd3004fca8800aa8e6f335b53d9e1f2263d0e2f41.webp?w=1600",
-    region: 'APAC',
-    skillBracket: 'Pro',
-    format: 'LAN',
-    eventType: 'Livestream'
-  },
-  {
-    id: 2,
-    title: "Esports World Cup 2025",
-    game: "Dota 2",
-    prize: "$10,000,000",
+    id: 'trending-1',
+    title: 'VCT Pacific Masters',
+    image: tournament1,
+    category: 'VALORANT',
+    prizePool: '$250,000',
     participants: 16,
-    startDate: "2025-09-01",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://esportsinsider.com/wp-content/uploads/2025/04/Screenshot-2025-04-15-165049.png",
-    region: 'Global',
-    skillBracket: 'Pro',
-    format: 'LAN',
-    eventType: 'Pro'
+    status: 'live',
+    startDate: 'Jan 15, 2024',
+    duration: '5 days'
   },
   {
-    id: 3,
-    title: "Skyesports Championship",
-    game: "CS2",
-    prize: "$150,000",
-    participants: 12,
-    startDate: "2025-09-10",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://esportsinsider.com/wp-content/uploads/2024/10/skyesports-championship-large.jpg",
-    region: 'APAC',
-    skillBracket: 'Pro',
-    format: 'Online',
-    eventType: 'Pro'
+    id: 'trending-2',
+    title: 'CS2 Major Championship',
+    image: tournament2,
+    category: 'CS2',
+    prizePool: '$500,000',
+    participants: 24,
+    status: 'upcoming',
+    startDate: 'Jan 20, 2024',
+    duration: '7 days'
   },
   {
-    id: 4,
-    title: "BGMI India Series (BGIS)",
-    game: "BGMI",
-    prize: "₹2,00,00,000",
+    id: 'trending-3',
+    title: 'Apex Legends Global Series',
+    image: tournament3,
+    category: 'Apex Legends',
+    prizePool: '$300,000',
     participants: 32,
-    startDate: "2025-08-20",
-    status: "live",
-    link: "/live-match",
-    image: "https://afkgaming.com/mobileesports/news/bgis-2024-format-dates-registration-prize-pool-distribution-and-more",
-    region: 'APAC',
-    skillBracket: 'Pro',
-    format: 'LAN',
-    eventType: 'Livestream'
+    status: 'registration',
+    startDate: 'Jan 25, 2024',
+    duration: '3 days'
   },
   {
-    id: 5,
-    title: "VCT 2025: EMEA Stage 2",
-    game: "Valorant",
-    prize: "$250,000",
-    participants: 10,
-    startDate: "2025-08-18",
-    status: "live",
-    link: "/live-match",
-    image: "https://i.ytimg.com/vi/VgHMtZBWLlk/hqdefault.jpg?v=6802c018",
-    region: 'EMEA',
-    skillBracket: 'Pro',
-    format: 'LAN',
-    eventType: 'Livestream'
-  },
-  {
-    id: 6,
-    title: "College Gaming League",
-    game: "Valorant",
-    prize: "$5,000",
-    participants: 64,
-    startDate: "2025-10-01",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://esportsinsider.com/wp-content/uploads/2025/07/PlayVS-College-League--large.png",
-    region: 'Americas',
-    skillBracket: 'Beginner',
-    format: 'Online',
-    eventType: 'Community'
-  },
-  {
-    id: 7,
-    title: "IEM Chengdu 2025",
-    game: "CS2",
-    prize: "$250,000",
-    participants: 16,
-    startDate: "2025-09-05",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://admin.esports.gg/wp-content/uploads/2024/01/IEM-Chengdu.jpg",
-    region: 'China',
-    skillBracket: 'Pro',
-    format: 'LAN',
-    eventType: 'Pro'
-  },
-  {
-    id: 8,
-    title: "The International 2025",
-    game: "Dota 2",
-    prize: "$15,000,000",
+    id: 'trending-4',
+    title: 'Overwatch Champions Cup',
+    image: tournament1,
+    category: 'Overwatch 2',
+    prizePool: '$150,000',
     participants: 20,
-    startDate: "2025-10-10",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://clan.fastly.steamstatic.com/images/3703047/6c52d654ed6cf25f7e3f548e729c93c86e414aa7.png",
-    region: 'Global',
-    skillBracket: 'Pro',
-    format: 'LAN',
-    eventType: 'Pro'
+    status: 'upcoming',
+    startDate: 'Feb 1, 2024',
+    duration: '4 days'
   },
   {
-    id: 9,
-    title: "Valorant Game Changers NA",
-    game: "Valorant",
-    prize: "$50,000",
-    participants: 8,
-    startDate: "2025-09-12",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://cdn.sanity.io/images/dsfx7636/news/52cf9139eac80dad75e48f3f0e2f8d580739c2eb-1920x1080.jpg",
-    region: 'Americas',
-    skillBracket: 'Semi-Pro',
-    format: 'Online',
-    eventType: 'Qualifier'
+    id: 'trending-5',
+    title: 'Rocket League World Championship',
+    image: tournament2,
+    category: 'Rocket League',
+    prizePool: '$400,000',
+    participants: 16,
+    status: 'registration',
+    startDate: 'Feb 5, 2024',
+    duration: '6 days'
   },
   {
-    id: 10,
-    title: "Local LAN Scrims",
-    game: "CS2",
-    prize: "$1,000",
-    participants: 8,
-    startDate: "2025-09-15",
-    status: "upcoming",
-    link: "/submission",
-    image: "https://img-cdn.hltv.org/gallerypicture/B0nnWjSrSuhhKSQUfI6B5C.png?ixlib=java-2.1.0&w=1200&s=83a9703dadb51e47877ce0704a730f0d",
-    region: 'EMEA',
-    skillBracket: 'Beginner',
-    format: 'LAN',
-    eventType: 'Community'
+    id: 'trending-6',
+    title: 'League of Legends Masters',
+    image: tournament3,
+    category: 'League of Legends',
+    prizePool: '$750,000',
+    participants: 12,
+    status: 'upcoming',
+    startDate: 'Feb 10, 2024',
+    duration: '8 days'
   }
+];
+
+export const liveTournaments: Tournament[] = [
+  {
+    id: 'live-1',
+    title: 'VCT Pacific Showdown',
+    image: tournament2,
+    category: 'VALORANT',
+    prizePool: '$100,000',
+    participants: 8,
+    status: 'live',
+    duration: '2 days'
+  },
+  {
+    id: 'live-2',
+    title: 'CS2 Elite Series',
+    image: tournament3,
+    category: 'CS2',
+    prizePool: '$200,000',
+    participants: 16,
+    status: 'live',
+    duration: '3 days'
+  },
+  {
+    id: 'live-3',
+    title: 'Apex Legends Pro League',
+    image: tournament1,
+    category: 'Apex Legends',
+    prizePool: '$180,000',
+    participants: 20,
+    status: 'live',
+    duration: '4 days'
+  },
+  {
+    id: 'live-4',
+    title: 'Fortnite Championship',
+    image: tournament2,
+    category: 'Fortnite',
+    prizePool: '$350,000',
+    participants: 100,
+    status: 'live',
+    duration: '1 day'
+  }
+];
+
+export const upcomingTournaments: Tournament[] = [
+  {
+    id: 'upcoming-1',
+    title: 'World Championship 2024',
+    image: tournament3,
+    category: 'VALORANT',
+    prizePool: '$1,000,000',
+    participants: 24,
+    status: 'upcoming',
+    startDate: 'Mar 1, 2024',
+    duration: '14 days'
+  },
+  {
+    id: 'upcoming-2',
+    title: 'CS2 Global Masters',
+    image: tournament1,
+    category: 'CS2',
+    prizePool: '$800,000',
+    participants: 32,
+    status: 'upcoming',
+    startDate: 'Feb 15, 2024',
+    duration: '10 days'
+  },
+  {
+    id: 'upcoming-3',
+    title: 'International Dota Championship',
+    image: tournament2,
+    category: 'Dota 2',
+    prizePool: '$2,500,000',
+    participants: 18,
+    status: 'upcoming',
+    startDate: 'Mar 15, 2024',
+    duration: '12 days'
+  },
+  {
+    id: 'upcoming-4',
+    title: 'Call of Duty World League',
+    image: tournament3,
+    category: 'Call of Duty',
+    prizePool: '$600,000',
+    participants: 16,
+    status: 'upcoming',
+    startDate: 'Feb 28, 2024',
+    duration: '5 days'
+  }
+];
+
+export const yourTournaments: Tournament[] = [
+  {
+    id: 'your-1',
+    title: 'Weekly VALORANT Cup',
+    image: tournament1,
+    category: 'VALORANT',
+    prizePool: '$5,000',
+    participants: 64,
+    status: 'registration',
+    startDate: 'This Weekend',
+    duration: '2 days'
+  },
+  {
+    id: 'your-2',
+    title: 'Amateur CS2 League',
+    image: tournament2,
+    category: 'CS2',
+    prizePool: '$2,500',
+    participants: 32,
+    status: 'upcoming',
+    startDate: 'Next Week',
+    duration: '3 days'
+  },
+  {
+    id: 'your-3',
+    title: 'Local Esports Tournament',
+    image: tournament3,
+    category: 'Mixed',
+    prizePool: '$1,000',
+    participants: 48,
+    status: 'ended',
+    startDate: 'Last Week',
+    duration: '1 day'
+  }
+];
+
+export const esportsChampionships: Tournament[] = [
+  {
+    id: 'esports-1',
+    title: 'Global Esports Championship',
+    image: tournament2,
+    category: 'Multi-Game',
+    prizePool: '$5,000,000',
+    participants: 128,
+    status: 'upcoming',
+    startDate: 'Jun 1, 2024',
+    duration: '30 days'
+  },
+  {
+    id: 'esports-2',
+    title: 'International Gaming Olympics',
+    image: tournament3,
+    category: 'Multi-Game',
+    prizePool: '$3,000,000',
+    participants: 200,
+    status: 'registration',
+    startDate: 'Apr 1, 2024',
+    duration: '21 days'
+  },
+  {
+    id: 'esports-3',
+    title: 'Professional Gaming League',
+    image: tournament1,
+    category: 'Multi-Game',
+    prizePool: '$2,000,000',
+    participants: 96,
+    status: 'upcoming',
+    startDate: 'May 1, 2024',
+    duration: '15 days'
+  }
+];
+
+export const amateurLeagues: Tournament[] = [
+  {
+    id: 'amateur-1',
+    title: 'Beginner VALORANT League',
+    image: tournament1,
+    category: 'VALORANT',
+    prizePool: '$1,000',
+    participants: 128,
+    status: 'registration',
+    startDate: 'Every Month',
+    duration: '1 week'
+  },
+  {
+    id: 'amateur-2',
+    title: 'Student Gaming Championship',
+    image: tournament2,
+    category: 'Mixed',
+    prizePool: '$2,500',
+    participants: 256,
+    status: 'upcoming',
+    startDate: 'Feb 20, 2024',
+    duration: '5 days'
+  },
+  {
+    id: 'amateur-3',
+    title: 'Community Cup Series',
+    image: tournament3,
+    category: 'Mixed',
+    prizePool: '$500',
+    participants: 64,
+    status: 'registration',
+    startDate: 'Weekly',
+    duration: '2 days'
+  }
+];
+
+// Combine all tournament arrays into one and export it
+export const allTournaments: Tournament[] = [
+  ...trendingTournaments,
+  ...liveTournaments,
+  ...upcomingTournaments,
+  ...yourTournaments,
+  ...esportsChampionships,
+  ...amateurLeagues
 ];
