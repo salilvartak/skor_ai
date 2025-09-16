@@ -22,8 +22,9 @@ const Index = () => {
         <HeroSection />
 
         {/* Tournament Sections */}
-        <div className="space-y-4">
+        <div className="space-y-4 ">
           <TournamentRow 
+          
             title="Trending Tournaments" 
             tournaments={trendingTournaments} 
           />
