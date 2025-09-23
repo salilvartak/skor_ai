@@ -91,11 +91,11 @@ const TournamentCard = ({ tournament, size = 'medium', onClick }: TournamentCard
         width: size === 'small' ? '192px' : '320px',
         height: size === 'small' ? '128px' : '192px',
         // Increased padding to accommodate a scale of 1.25 (125%)
-        padding: size === 'small' ? '8px' : '14px',
+        padding: size === 'small' ? '8px' : '4px',
       }}
     >
       <div
-        className={`relative w-full h-full rounded-lg overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-[1.25] hover:shadow-card`}
+        className={`relative w-full h-full rounded-lg overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105 hover:shadow-card`}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         onClick={onClick}

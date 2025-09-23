@@ -9,16 +9,21 @@ import SubmissionForm from "./pages/submissionform";
 import Chat from "./pages/chat";
 import Profile from "./pages/profile";
 import SovaSunset from "./pages/lineup/sova-sunset";
-
 import Teams from "./pages/Teams";
 import TeamDetails from "./pages/TeamDetails";
 import Tournaments from "./pages/Tournaments";
 import TournamentDetails from "./pages/TournamentDetails";
 import LiveMatchPage from "./pages/LiveMatchPage";
 import Hunter from "./pages/Hunter";
-import ProDetails from "./pages/pro-details";
-import LivestreamDetails from "./pages/livestream-details";
-import AmateurDetails from "./pages/amateur-details";
+import Coupons from "./pages/Coupons";
+import CouponDetails from "./pages/CouponDetails";
+import Airdrops from "./pages/Airdrops";
+import AirdropDetails from "./pages/AirdropDetails";
+
+
+// New imports
+import HunterSelection from "./pages/HunterSelection";
+
 
 function App() {
   return (
@@ -37,12 +42,18 @@ function App() {
       <Route path="/tournaments" element={<Tournaments />} />
       <Route path="/tournaments/:id" element={<TournamentDetails />} />
       <Route path="/live" element={<LiveMatchPage />} />
-      <Route path="/dashboard/hunter" element={<Hunter />} />
-      <Route path="/pro-details/:id" element={<ProDetails />} />
-      <Route path="/livestream-details/:id" element={<LivestreamDetails />} />
-      <Route path="/amateur-details/:id" element={<AmateurDetails />} />
 
-      {/* Move this route to the end */}
+      {/* Update this route to the new HunterSelection page */}
+      <Route path="/selection" element={<HunterSelection />} />
+      <Route path="/selection/hunter" element={<Hunter />} />
+      <Route path="/selection/coupons" element={<Coupons />} />
+      <Route path="/coupons/:id" element={<CouponDetails />} />
+      <Route path="/selection/airdrops" element={<Airdrops />} />
+      <Route path="/airdrops/:id" element={<AirdropDetails />} />
+      {/* Add new routes for Coupons and Airdrops */}
+      
+      
+      
       <Route path="*" element={<NotFound />} />
     </Routes>
   );

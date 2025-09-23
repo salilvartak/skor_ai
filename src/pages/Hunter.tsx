@@ -9,11 +9,13 @@ import {
   esportsChampionships, 
   amateurLeagues 
 } from '@/data/tournaments';
+import Sidebar from '@/components/sidebar';
 
 const Index = () => {
   return (
     <div className="min-h-screen bg-[#121417] font-chakra text-white">
       {/* Header */}
+      <Sidebar />
       <Header />
 
       {/* Main Content */}
