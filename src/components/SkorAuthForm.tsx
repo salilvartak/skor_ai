@@ -4,6 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { auth } from '@/firebase';
 import { createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import { useNavigate } from 'react-router-dom';
+import { signInWithGoogle } from '@/firebase'; // Import the function
+
+import { UserCredential } from 'firebase/auth';
 
 interface FormData {
   email: string;
@@ -54,9 +57,22 @@ const SkorAuthForm: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = () => {
-    console.log('Google login attempted');
-  };
+const handleGoogleLogin = async () => {
+    try {
+        const result = await signInWithGoogle();
+        const user = result.user;
+        const isNewUser = user.metadata.creationTime === user.metadata.lastSignInTime;
+
+        if (isNewUser) {
+            navigate('/profile-setup');
+        } else {
+            navigate('/dashboard');
+        }
+    } catch (error) {
+        console.error('Google login failed:', error);
+        alert('Failed to sign in with Google. Please try again.');
+    }
+};
 
   const switchMode = () => {
     setIsLogin(prev => !prev);
