@@ -31,7 +31,7 @@ const itemVariants = {
 const HunterSelection: React.FC = () => {
   return (
     <div>
-      <Header />
+      
 
     <div className="min-h-screen bg-[#121417] font-chakra text-white flex flex-col items-center justify-center relative overflow-hidden p-4">
       

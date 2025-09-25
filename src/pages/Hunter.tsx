@@ -1,11 +1,11 @@
-import {Header}  from "@/components/Header";
-import HeroSection from "@/components/HeroSection";
-import TournamentRow from "@/components/TournamentRow";
-import Sidebar from "@/components/sidebar";
-import { useEffect, useState } from "react";
-import { trendingTournaments as trendingData } from "@/data/tournaments";
+import { useState, useEffect } from 'react';
+import { Header } from '@/components/Header';
+import HeroSection from '@/components/HeroSection';
+import TournamentRow from '@/components/TournamentRow';
+import Sidebar from '@/components/sidebar';
+import { trendingTournaments as trendingData } from '@/data/tournaments';
 
-// Define the shape of a tournament object
+// Defines the structure of a tournament object
 interface Tournament {
   id: string;
   title: string;
@@ -13,7 +13,7 @@ interface Tournament {
   category: string;
   prizePool: string;
   participants: number;
-  status: "live" | "upcoming" | "registration" | "ended";
+  status: 'live' | 'upcoming' | 'registration' | 'ended';
   startDate?: string;
   duration?: string;
   location?: string;
@@ -26,13 +26,13 @@ interface Tournament {
 }
 
 const Index = () => {
-  // State for different tournament categories
+  // State for managing tournament data
   const [trendingTournaments, setTrendingTournaments] = useState<Tournament[]>(trendingData);
   const [liveTournaments, setLiveTournaments] = useState<Tournament[]>([]);
   const [upcomingTournaments, setUpcomingTournaments] = useState<Tournament[]>([]);
   const [registrationLive, setRegistrationLive] = useState<Tournament[]>([]);
   
-  // State for loading and error handling
+  // State for loading and error UI
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -68,7 +68,7 @@ const Index = () => {
           const tournament: Tournament = {
             id: t.id.toString(),
             title: t.tournament_name,
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS-xQ8wcPkLD08nKlW3CpdLU1z0Zf4ii_3CsQ&s",
+            image: "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg",
             category: t.game_id_id === 2 ? "BGMI" : `Game ID: ${t.game_id_id}`,
             prizePool: `${t.prize_pool_currency} ${t.prize_pool.toLocaleString()}`,
             participants: 0, 
@@ -118,7 +118,6 @@ const Index = () => {
     fetchTournaments();
   }, []);
 
-  // This function will render the content based on loading and error state
   const renderContent = () => {
     if (loading) {
         return <div className="text-center py-10">Loading tournaments...</div>;
@@ -151,16 +150,18 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-[#121417] font-chakra text-white">
       <Sidebar />
-      <Header />
+      <Header 
+        liveTournaments={liveTournaments}
+        upcomingTournaments={upcomingTournaments}
+        trendingTournaments={trendingTournaments}
+      />
       <main className="pt-0">
         <HeroSection />
-        <div className="space-y-4 overflow-visible">
-          {/* Trending tournaments are static, so they always show */}
+        <div className="space-y-4 ">
           <TournamentRow
             title="Trending Tournaments"
             tournaments={trendingTournaments}
           />
-          {/* The rest of the content will render based on API status */}
           {renderContent()}
         </div>
         <div className="h-16"></div>

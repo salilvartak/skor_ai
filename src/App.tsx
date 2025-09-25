@@ -21,7 +21,7 @@ import ProfileSetup from "./pages/ProfileSetup";
 import SovaSunset from "./pages/lineup/sova-sunset";
 import Teams from "./pages/Teams";
 import TeamDetails from "./pages/TeamDetails";
-import LiveMatchPage from "./pages/LiveMatchPage";
+
 import Hunter from "./pages/Hunter";
 import Coupons from "./pages/Coupons";
 import CouponDetails from "./pages/CouponDetails";
@@ -70,7 +70,7 @@ function App() {
       <Route path="/lineup/sova-sunset" element={<SovaSunset />} />
       <Route path="/teams" element={<Teams />} />
       <Route path="/teams/:id" element={<TeamDetails />} />
-      <Route path="/live" element={<LiveMatchPage />} />
+      
       <Route path="/selection" element={<HunterSelection />} />
       <Route path="/selection/hunter" element={<Hunter />} />
       <Route path="/selection/coupons" element={<Coupons />} />

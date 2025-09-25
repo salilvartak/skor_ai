@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import Header from '@/components/Header';
+import {Header} from '@/components/Header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { CouponCard } from '@/components/CouponCard';
@@ -32,7 +32,10 @@ const CouponsAndGiftCards = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#141110] via-[#2a1f1a] to-back font-chakra text-white">
-      <Header />
+      <Header 
+      liveTournaments={[]}
+          upcomingTournaments={[]}
+          trendingTournaments={[]}/>
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
         {[...Array(8)].map((_, i) => (
           <div

@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import  Header from "@/components/Header";
+import { Header } from "@/components/Header";
 import StatsResults from "@/components/StatsResult";
 import { Loader2 } from "lucide-react";
 
@@ -87,7 +87,10 @@ const ValorantStats: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-[#141110] via-[#2a1f1a] to-back text-white font-chakra">
-      <Header />
+      <Header 
+      liveTournaments={[]}
+          upcomingTournaments={[]}
+          trendingTournaments={[]}/>
       <div className="flex flex-col items-center p-6 pt-24">
         <Card className="w-full max-w-2xl bg-black/20 border border-white/10 rounded-2xl shadow-2xl backdrop-blur-lg">
           <CardHeader>

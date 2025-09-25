@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useParams } from 'react-router-dom';
-import  Header  from '@/components/Header';
+import  {Header}  from '@/components/Header';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -39,7 +39,10 @@ const CouponDetails = () => {
     if (!coupon) {
         return (
             <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-[#141110] via-[#2a1f1a] to-back text-white font-chakra">
-                <Header />
+                <Header 
+                liveTournaments={[]}
+          upcomingTournaments={[]}
+          trendingTournaments={[]}/>
                 <p className="text-2xl">Coupon not found.</p>
             </div>
         );
@@ -59,7 +62,10 @@ const CouponDetails = () => {
 
     return (
         <div className="min-h-screen bg-gradient-to-br from-[#141110] via-[#2a1f1a] to-back text-white font-chakra p-6 pt-24">
-            <Header />
+            <Header 
+            liveTournaments={[]}
+          upcomingTournaments={[]}
+          trendingTournaments={[]}/>
             <main className="max-w-7xl mx-auto">
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
                     {/* Left Column: Coupon Image */}

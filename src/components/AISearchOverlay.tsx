@@ -1,25 +1,40 @@
 import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, X } from 'lucide-react';
+import TournamentCard from './TournamentCard';
+
+// Defines the structure of a tournament object
+interface Tournament {
+  id: string;
+  title: string;
+  image: string;
+  category: string;
+  prizePool: string;
+  participants: number;
+  status: 'live' | 'upcoming' | 'registration' | 'ended';
+  startDate?: string;
+  registration_link?: string;
+}
 
 interface AISearchOverlayProps {
   isOpen: boolean;
   onClose: () => void;
+  liveTournaments: Tournament[];
+  upcomingTournaments: Tournament[];
+  trendingTournaments: Tournament[];
 }
 
-// Hardcoded results for the suggestions
-const hardcodedResults: { [key: string]: string } = {
-  "Upcoming BGMI tournaments": "There are several BGMI tournaments coming up next month, including the 'BGMI Champions League' with a prize pool of ₹5,00,000.",
-  "Trending Tournaments": "The most popular tournament right now is the 'VCT Pacific Masters' for VALORANT, featuring top teams from the APAC region.",
-  "Live tournaments right now": "The 'CS2 Major Championship' is currently live. You can watch the finals on the official Twitch stream."
-};
-
-const AISearchOverlay = ({ isOpen, onClose }: AISearchOverlayProps) => {
+const AISearchOverlay = ({
+    isOpen,
+    onClose,
+    liveTournaments,
+    upcomingTournaments,
+    trendingTournaments
+}: AISearchOverlayProps) => {
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [searchResult, setSearchResult] = useState('');
+  const [searchResults, setSearchResults] = useState<Tournament[]>([]);
 
-  // Updated suggestions
   const suggestions = [
     "Upcoming BGMI tournaments",
     "Trending Tournaments",
@@ -35,21 +50,38 @@ const AISearchOverlay = ({ isOpen, onClose }: AISearchOverlayProps) => {
     if (!searchQuery.trim()) return;
 
     setIsLoading(true);
-    setSearchResult('');
+    setSearchResults([]);
 
-    // Simulate a network delay for a better user experience
+    // Simulates a network delay for a better user experience
     setTimeout(() => {
-      const result = hardcodedResults[searchQuery];
-      if (result) {
-        setSearchResult(result);
-      } else {
-        setSearchResult("Sorry, I can only provide information on the suggested topics. Please select one of the suggestions.");
+      let results: Tournament[] = [];
+      switch (searchQuery) {
+        case "Upcoming BGMI tournaments":
+          results = upcomingTournaments.filter(t => t.category === "BGMI");
+          break;
+        case "Trending Tournaments":
+          results = trendingTournaments;
+          break;
+        case "Live tournaments right now":
+          results = liveTournaments;
+          break;
+        default:
+          results = [];
       }
+      setSearchResults(results);
       setIsLoading(false);
     }, 500);
   };
-  
-  // Close on 'Escape' key press
+
+  // Resets the search when the overlay is closed
+  useEffect(() => {
+    if (!isOpen) {
+        setQuery('');
+        setSearchResults([]);
+    }
+  }, [isOpen]);
+
+  // Allows closing the overlay with the 'Escape' key
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
@@ -78,14 +110,15 @@ const AISearchOverlay = ({ isOpen, onClose }: AISearchOverlayProps) => {
             exit={{ y: '-20%', opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
             className="w-full h-full pt-16 px-4"
-            onClick={(e) => e.stopPropagation()} 
+            onClick={(e) => e.stopPropagation()}
           >
-            <div className="max-w-2xl mx-auto">
+            <div className="max-w-6xl mx-auto">
                 <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                     type="text"
                     value={query}
+                    // This line has been corrected
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch(query)}
                     placeholder="Ask about any tournament..."
@@ -99,7 +132,7 @@ const AISearchOverlay = ({ isOpen, onClose }: AISearchOverlayProps) => {
 
                 {/* Suggestions & Results */}
                 <div className="mt-6 text-white">
-                    {!searchResult && !isLoading && (
+                    {searchResults.length === 0 && !isLoading && (
                         <>
                             <h3 className="text-sm font-semibold text-gray-400">Suggestions</h3>
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
@@ -116,11 +149,13 @@ const AISearchOverlay = ({ isOpen, onClose }: AISearchOverlayProps) => {
                         </>
                     )}
 
-                    {isLoading && <p className="text-center">Finding an answer...</p>}
-                    
-                    {searchResult && (
-                        <div className="bg-[#1a1c20]/80 p-4 rounded-lg border border-gray-700">
-                            <p className="whitespace-pre-wrap">{searchResult}</p>
+                    {isLoading && <p className="text-center">Searching...</p>}
+
+                    {searchResults.length > 0 && (
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            {searchResults.map(tournament => (
+                                <TournamentCard key={tournament.id} tournament={tournament} />
+                            ))}
                         </div>
                     )}
                 </div>
