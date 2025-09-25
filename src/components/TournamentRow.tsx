@@ -21,9 +21,11 @@ interface TournamentRowProps {
   title: string;
   tournaments: Tournament[];
   showSeeAll?: boolean;
+  // This prop is now required, as shown in the error message
+  onCardClick: (tournament: Tournament) => void;
 }
 
-const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowProps) => {
+const TournamentRow = ({ title, tournaments, showSeeAll = true, onCardClick }: TournamentRowProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
@@ -102,7 +104,6 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
             </Button>
           )}
 
-          {/* Added padding and negative margin to prevent clipping on hover */}
           <div
             ref={scrollRef}
             onScroll={handleScroll}
@@ -111,7 +112,11 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
           >
             {tournaments.map((tournament) => (
               <div key={tournament.id} className="flex-shrink-0">
-                <TournamentCard tournament={tournament} />
+                {/* Pass the onClick handler to each card */}
+                <TournamentCard 
+                    tournament={tournament} 
+                    onClick={() => onCardClick(tournament)} 
+                />
               </div>
             ))}
           </div>

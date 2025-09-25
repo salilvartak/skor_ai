@@ -1,21 +1,13 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
-import { Dialog, DialogContent } from '@/components/ui/dialog';
-import { Badge } from '@/components/ui/badge';
 import {
-  Play,
-  Plus,
-  ThumbsUp,
-  ThumbsDown,
-  Share2,
-  Calendar,
-  Trophy,
-  Users,
-  MapPin,
-  Clock,
-  Star,
-  X
-} from 'lucide-react';
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { Trophy, Calendar, MapPin, AlignLeft, List, Newspaper } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
 interface Tournament {
   id: string;
@@ -26,7 +18,13 @@ interface Tournament {
   participants: number;
   status: 'live' | 'upcoming' | 'registration' | 'ended';
   startDate?: string;
-  duration?: string;
+  location?: string;
+  registration_link?: string;
+  tournament_start_date?: string;
+  tournament_end_date?: string;
+  registration_start_date?: string;
+  registration_end_date?: string;
+  tournament_location?: string;
 }
 
 interface TournamentModalProps {
@@ -35,254 +33,169 @@ interface TournamentModalProps {
   onClose: () => void;
 }
 
+// Hardcoded showcase data
+const detailedTournamentInfo = {
+  overview:
+    "The Skor Elite  Championship is the ultimate battle for glory, featuring the top teams from across the nation. Compete for a massive prize pool and earn your place among the legends of the game. The tournament spans three days of intense action, culminating in a grand finale to crown the champion.",
+  schedule: [
+    { date: 'Day 1', event: 'Group Stage - Round 1', time: '10:00 AM IST' },
+    { date: 'Day 1', event: 'Group Stage - Round 2', time: '02:00 PM IST' },
+    { date: 'Day 2', event: 'Semifinals - Group A', time: '11:00 AM IST' },
+    { date: 'Day 2', event: 'Semifinals - Group B', time: '03:00 PM IST' },
+    { date: 'Day 3', event: 'Grand Finale', time: '05:00 PM IST' },
+  ],
+  rules: [
+    "All players must register with their in-game name (IGN).",
+    "No use of third-party software or hacks is allowed. Violation will result in immediate disqualification.",
+    "Teams must consist of four players.",
+    "Communication is restricted to team members only.",
+    "Decisions made by tournament organizers are final.",
+  ],
+};
+
 const TournamentModal = ({ tournament, isOpen, onClose }: TournamentModalProps) => {
-  const [isLiked, setIsLiked] = useState(false);
-  const [isDisliked, setIsDisliked] = useState(false);
-  const [isInWatchlist, setIsInWatchlist] = useState(false);
+  if (!tournament) {
+    return null;
+  }
 
-  if (!tournament) return null;
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'live':
-        return 'bg-red-500 text-white';
-      case 'upcoming':
-        return 'bg-yellow-500 text-black';
-      case 'registration':
-        return 'bg-green-500 text-white';
-      case 'ended':
-        return 'bg-gray-500 text-white';
-      default:
-        return 'bg-muted text-muted-foreground';
+  const getStatusBadge = () => {
+    if (tournament.status === 'live') {
+      return (
+        <div className="absolute top-4 left-4 z-10">
+          <div className="bg-red-600/90 px-3 py-1 rounded-md text-xs font-bold text-white flex items-center space-x-1.5 shadow-lg">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+            <span>LIVE</span>
+          </div>
+        </div>
+      );
     }
+    return null;
   };
 
-  const getActionButton = (status: string) => {
-    switch (status) {
-      case 'live':
-        return { text: 'Watch Live', icon: Play };
-      case 'upcoming':
-        return { text: 'Set Reminder', icon: Calendar };
-      case 'registration':
-        return { text: 'Join Tournament', icon: Plus };
-      default:
-        return { text: 'View Details', icon: Play };
+  const getCtaButton = () => {
+    let text = 'View Details';
+    if (tournament.status === 'live') text = 'Watch Now';
+    if (tournament.status === 'registration') text = 'Join Tournament';
+    if (tournament.status === 'ended') text = 'View Results';
+
+    if (!tournament.registration_link) {
+      return (
+        <Button disabled className="w-full mt-5 bg-accent/50 text-white font-bold py-3 rounded-lg">
+          {text}
+        </Button>
+      );
     }
+
+    return (
+      <a href={tournament.registration_link} target="_blank" rel="noopener noreferrer" className="block">
+        <Button className="w-full mt-5 bg-accent hover:bg-accent/80 text-white font-bold py-3 rounded-lg transition-transform hover:scale-105">
+          {text}
+        </Button>
+      </a>
+    );
   };
-
-  const actionButton = getActionButton(tournament.status);
-  const ActionIcon = actionButton.icon;
-
-  // Mock additional data that would come from an API
-  const additionalInfo = {
-    description: `Experience the ultimate ${tournament.category} competition with top-tier teams from around the globe. This tournament features the highest level of competitive play with strategic gameplay, incredible skill displays, and heart-stopping moments that will keep you on the edge of your seat.`,
-    organizer: 'Skor AI Events',
-    venue: 'Online Platform',
-    format: 'Double Elimination',
-    teamSize: '5v5',
-    rating: '4.8',
-    viewerCount: '2.3M',
-    tags: ['Competitive', 'Professional', 'Live Broadcast', 'Championship'],
-    schedule: [
-      { date: 'Day 1', matches: 'Opening Ceremony & Group Stage' },
-      { date: 'Day 2-3', matches: 'Group Stage Elimination' },
-      { date: 'Day 4-5', matches: 'Playoffs & Semifinals' },
-      { date: 'Day 6', matches: 'Grand Finals' }
-    ]
-  };
-
+  
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent 
-        className="font-chakra max-w-4xl max-h-[90vh] overflow-y-auto bg-[#121417] border-border border-accent p-0 text-white
-        scrollbar scrollbar-thumb-gray-700 scrollbar-track-transparent scrollbar-thumb-rounded-full
-        hover:scrollbar-thumb-gray-500 transition-colors duration-200"
-      >
-        <div className="relative">
-          {/* Hero Section with Video/Image */}
-          <div className="relative h-96 w-full overflow-hidden rounded-t-lg">
-            <div
-              className="absolute inset-0 bg-cover bg-center transition-transform duration-300"
-              style={{ backgroundImage: `url(${tournament.image})` }}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/30 to-transparent" />
+      <DialogContent className="sm:max-w-[800px] p-0 overflow-hidden border-gray-700/50 bg-[#1a1c20] text-white font-chakra">
+        <div className="relative w-full h-60 md:h-80">
+          <img
+            src={tournament.image}
+            alt={tournament.title}
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1c20] to-transparent" />
+          {getStatusBadge()}
+          <div className="absolute bottom-0 left-0 p-6 z-10">
+            <h2 className="text-3xl md:text-4xl font-bold text-white mb-1">
+              {tournament.title}
+            </h2>
+            <p className="text-lg text-gray-400">{tournament.category}</p>
+          </div>
+        </div>
 
-            {/* Close Button */}
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={onClose}
-              className="absolute top-4 right-4 z-20 bg-background/20 hover:bg-background/40 backdrop-blur-sm border border-border/50"
-            >
-              <X className="h-5 w-5" />
-            </Button>
-
-            {/* Content Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-8 z-10">
-              <div className="space-y-4">
-                {/* Title and Status */}
-                <div className="space-y-2">
-                  <div className="flex items-center space-x-3">
-                    <Badge className={getStatusColor(tournament.status)}>
-                      {tournament.status.toUpperCase()}
-                    </Badge>
-                    <span className="text-accent text-sm font-semibold">
-                      {tournament.category}
-                    </span>
-                    
-                  </div>
-                  <h1 className="text-4xl font-bold text-foreground">
-                    {tournament.title}
-                  </h1>
-                </div>
-
-                {/* Action Buttons */}
-                <div className="flex items-center space-x-3">
-                  <Button
-                    size="lg"
-                    className="bg-accent hover:opacity-90 hover:bg-accent px-8"
-                  >
-                    <ActionIcon className="mr-2 h-5 w-5" />
-                    {actionButton.text}
-                  </Button>
-
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => setIsInWatchlist(!isInWatchlist)}
-                    className={`${isInWatchlist ? 'bg-accent text-primary-foreground' : ''}`}
-                  >
-                    <Plus className="h-5 w-5 " />
-                  </Button>
-
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => {
-                      setIsLiked(!isLiked);
-                      if (isDisliked) setIsDisliked(false);
-                    }}
-                    className={`${isLiked ? 'bg-green-600 text-white' : ''}`}
-                  >
-                    <ThumbsUp className="h-5 w-5" />
-                  </Button>
-
-                  <Button
-                    variant="secondary"
-                    size="icon"
-                    onClick={() => {
-                      setIsDisliked(!isDisliked);
-                      if (isLiked) setIsLiked(false);
-                    }}
-                    className={`${isDisliked ? 'bg-red-600 text-white' : ''}`}
-                  >
-                    <ThumbsDown className="h-5 w-5" />
-                  </Button>
-
-                  <Button variant="secondary" size="icon">
-                    <Share2 className="h-5 w-5" />
-                  </Button>
-                </div>
+        <div className="p-6 md:p-8 grid md:grid-cols-2 gap-8">
+          {/* Details Section */}
+          <div className="space-y-6">
+            <div className="flex items-center text-white">
+              <Trophy className="h-5 w-5 mr-4 text-accent" />
+              <div>
+                <span className="font-semibold text-xl">{tournament.prizePool}</span>
+                <span className="text-gray-400 ml-2 text-sm">- Prize Pool</span>
               </div>
             </div>
+            
+            <div className="flex items-center text-white">
+              <Calendar className="h-5 w-5 mr-4 text-accent" />
+              <div>
+                <p className="font-semibold text-xl">
+                    {tournament.startDate}
+                </p>
+                <p className="text-gray-400 text-sm">Start Date</p>
+              </div>
+            </div>
+
+            {tournament.location && (
+              <div className="flex items-center text-white">
+                <MapPin className="h-5 w-5 mr-4 text-accent" />
+                <div>
+                    <p className="font-semibold text-xl">{tournament.location}</p>
+                    <p className="text-gray-400 text-sm">Location</p>
+                </div>
+              </div>
+            )}
           </div>
 
-          {/* Content Section */}
-          <div className="p-8 space-y-8">
-            {/* Tournament Stats */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2 text-muted-foreground">
-                  <Trophy className="h-4 w-4" />
-                  <span className="text-sm">Prize Pool</span>
-                </div>
-                <p className="text-lg font-semibold text-white">{tournament.prizePool}</p>
-              </div>
+          {/* Registration/CTA Section */}
+          <div className="flex flex-col justify-end">
+            <DialogDescription className="text-gray-400 mb-6">
+              Full details about the tournament, including rules, schedule, and team information, are available below.
+            </DialogDescription>
+            {getCtaButton()}
+          </div>
+        </div>
 
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2 text-muted-foreground">
-                  <Users className="h-4 w-4" />
-                  <span className="text-sm">Participants</span>
-                </div>
-                <p className="text-lg font-semibold">{tournament.participants} Teams</p>
-              </div>
-
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2 text-muted-foreground">
-                  <Clock className="h-4 w-4" />
-                  <span className="text-sm">Duration</span>
-                </div>
-                <p className="text-lg font-semibold">{tournament.duration || '5 Days'}</p>
-              </div>
-
-              <div className="space-y-1">
-                <div className="flex items-center space-x-2 text-muted-foreground">
-                  <MapPin className="h-4 w-4" />
-                  <span className="text-sm">Format</span>
-                </div>
-                <p className="text-lg font-semibold">{additionalInfo.format}</p>
-              </div>
-            </div>
-
-            {/* Description */}
-            <div className="space-y-3">
-              <h3 className="text-xl font-semibold">About This Tournament</h3>
-              <p className="text-muted-foreground leading-relaxed">
-                {additionalInfo.description}
-              </p>
-            </div>
-
-            {/* Tournament Details */}
-            <div className="grid md:grid-cols-2 gap-8">
-              {/* Schedule */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold">Tournament Schedule</h3>
-                <div className="space-y-2">
-                  {additionalInfo.schedule.map((day, index) => (
-                    <div key={index} className="flex justify-between items-center p-3 bg-accent/80 rounded-md">
-                      <span className="font-medium">{day.date}</span>
-                      <span className="text-sm text-muted-foreground">{day.matches}</span>
+        {/* New Tabbed Section for Detailed Content */}
+        <div className="p-6 md:p-8 pt-0">
+          <Tabs defaultValue="overview" className="w-full">
+            <TabsList className="grid w-full grid-cols-3 bg-[#1a1c20] border-t border-gray-700/50">
+              <TabsTrigger value="overview" className="flex items-center gap-2 text-white/60 data-[state=active]:text-accent data-[state=active]:bg-[#2c2f35]">
+                <AlignLeft className="w-4 h-4" />
+                Overview
+              </TabsTrigger>
+              <TabsTrigger value="schedule" className="flex items-center gap-2 text-white/60 data-[state=active]:text-accent data-[state=active]:bg-[#2c2f35]">
+                <Calendar className="w-4 h-4" />
+                Schedule
+              </TabsTrigger>
+              <TabsTrigger value="rules" className="flex items-center gap-2 text-white/60 data-[state=active]:text-accent data-[state=active]:bg-[#2c2f35]">
+                <Newspaper className="w-4 h-4" />
+                Rules
+              </TabsTrigger>
+            </TabsList>
+            <TabsContent value="overview" className="mt-4 text-gray-400">
+              <p>{detailedTournamentInfo.overview}</p>
+            </TabsContent>
+            <TabsContent value="schedule" className="mt-4">
+              <ul className="space-y-4">
+                {detailedTournamentInfo.schedule.map((item, index) => (
+                  <li key={index} className="flex items-center justify-between border-b border-gray-700/50 pb-2">
+                    <div>
+                      <h4 className="font-bold text-white">{item.event}</h4>
+                      <p className="text-gray-400 text-sm">{item.date}</p>
                     </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Additional Info */}
-              <div className="space-y-3">
-                <h3 className="text-lg font-semibold">Tournament Info</h3>
-                <div className="space-y-3">
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Organizer</span>
-                    <span className="font-medium">{additionalInfo.organizer}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Team Size</span>
-                    <span className="font-medium">{additionalInfo.teamSize}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Expected Viewers</span>
-                    <span className="font-medium">{additionalInfo.viewerCount}</span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground">Start Date</span>
-                    <span className="font-medium">{tournament.startDate}</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Tags */}
-            <div className="space-y-3">
-              <h3 className="text-lg font-semibold">Tags</h3>
-              <div className="flex flex-wrap gap-2">
-                {additionalInfo.tags.map((tag, index) => (
-                  <Badge key={index} variant="secondary" className="px-3 py-1 bg-accent">
-                    {tag}
-                  </Badge>
+                    <span className="text-accent font-semibold">{item.time}</span>
+                  </li>
                 ))}
-              </div>
-            </div>
-          </div>
+              </ul>
+            </TabsContent>
+            <TabsContent value="rules" className="mt-4">
+              <ul className="list-disc list-inside space-y-2 text-gray-400">
+                {detailedTournamentInfo.rules.map((rule, index) => (
+                  <li key={index}>{rule}</li>
+                ))}
+              </ul>
+            </TabsContent>
+          </Tabs>
         </div>
       </DialogContent>
     </Dialog>

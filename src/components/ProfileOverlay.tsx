@@ -59,17 +59,14 @@ export const ProfileOverlay: React.FC<ProfileOverlayProps> = ({
       <DialogContent className="max-w-4xl h-[80vh] bg-black/50 backdrop-blur-xl border border-white/10 text-white p-0 flex font-chakra shadow-2xl overflow-hidden">
         {/* Sidebar */}
         <aside className="w-1/4 bg-black/20 p-6 flex flex-col justify-between">
-          <div>
-            <DialogHeader className="mb-8">
-              <DialogTitle className="text-xl font-semibold">Settings</DialogTitle>
-            </DialogHeader>
+          <div className="pt-8">
             <Tabs
               value={activeTab}
               onValueChange={setActiveTab}
               orientation="vertical"
               className="w-full"
             >
-              <TabsList className="flex flex-col items-start bg-transparent p-0 space-y-1">
+              <TabsList className="flex flex-col items-start bg-transparent p-0 space-y-1 mt-10">
                 {[
                   { value: 'general', label: 'General', icon: Cog },
                   { value: 'notifications', label: 'Notifications', icon: Bell },

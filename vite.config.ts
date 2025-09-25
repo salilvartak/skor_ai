@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => ({
     proxy: {
       '/api': {
         // Correct the target IP address here
-        target: 'http://65.0.56.243:8000',
+        target: 'https://hunter-api.createc.in/',
         changeOrigin: true,
         secure: false,
       },

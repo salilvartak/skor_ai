@@ -16,6 +16,16 @@ import { signOut, onAuthStateChanged, User as FirebaseUser } from "firebase/auth
 import { auth, db } from "@/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Bell,
+  Swords,
+  Users,
+  Gamepad,
+  History,
+  TrendingUp,
+} from 'lucide-react';
+import NotificationsTab from '@/components/NotificationsTab';
 
 export default function Dashboard() {
   const [price, setPrice] = useState<string>("-");
@@ -24,8 +34,7 @@ export default function Dashboard() {
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const navigate = useNavigate();
 
-  const [timeSpent, setTimeSpent] = useState<number>(0);
-  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  // Removed timeSpent state and related useEffects
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -34,69 +43,7 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, []);
 
-  useEffect(() => {
-    if (!user) return;
-
-    const fetchTimeSpent = async () => {
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        const userDoc = await getDoc(userDocRef);
-        if (userDoc.exists()) {
-          const savedTime = userDoc.data().timeSpent || 0;
-          const lastOnlineTimestamp = userDoc.data().lastOnline || Date.now();
-          const timeDifference = Math.floor((Date.now() - lastOnlineTimestamp) / 1000);
-          setTimeSpent(savedTime + timeDifference);
-        } else {
-          setTimeSpent(0);
-        }
-      } catch (err) {
-        console.error("Error fetching user data:", err);
-      }
-    };
-    fetchTimeSpent();
-  }, [user?.uid]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    timerRef.current = setInterval(() => {
-      setTimeSpent((prev) => prev + 1);
-    }, 1000);
-
-    return () => {
-      if (timerRef.current) clearInterval(timerRef.current);
-    };
-  }, [user]);
-
-  useEffect(() => {
-    if (!user) return;
-
-    const saveInterval = setInterval(async () => {
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        await updateDoc(userDocRef, { timeSpent });
-      } catch (err) {
-        console.error("Error saving timeSpent:", err);
-      }
-    }, 30000);
-
-    return () => clearInterval(saveInterval);
-  }, [timeSpent, user]);
-
-  useEffect(() => {
-    const handleBeforeUnload = async () => {
-      if (!user) return;
-      try {
-        const userDocRef = doc(db, "users", user.uid);
-        await updateDoc(userDocRef, { timeSpent, lastOnline: Date.now() });
-      } catch (err) {
-        console.error("Error saving timeSpent on unload:", err);
-      }
-    };
-
-    window.addEventListener("beforeunload", handleBeforeUnload);
-    return () => window.removeEventListener("beforeunload", handleBeforeUnload);
-  }, [timeSpent, user]);
+  // Removed useEffect for fetching and saving timeSpent
 
   const handleLogout = async () => {
     try {
@@ -111,18 +58,12 @@ export default function Dashboard() {
     }
   };
 
-  const formatTime = (seconds: number) => {
-    const h = Math.floor(seconds / 3600);
-    const m = Math.floor((seconds % 3600) / 60);
-    return `${h}h ${m}m`;
-  };
-
   const agentSlides = [
     {
       title: "Agent Precision",
       button: "Try Now →",
       image: "",
-      bg: "bg-[url('/assets/cs2.webp')]",
+      bg: "bg-[url('/assets/cs.jpg')]",
       link: "/agent/precision",
     },
     {
@@ -164,7 +105,7 @@ export default function Dashboard() {
     const fetchPriceData = async () => {
       try {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/coins/skor-ai/market_chart?vs_currency=usd&days=30"
+          "https://api.coingecko.com/api/v3/coins/skor-ai/market-chart?vs_currency=usd&days=30"
         );
         const data = await response.json();
         const prices = data.prices;
@@ -332,8 +273,8 @@ export default function Dashboard() {
             <div>
               <div className="grid grid-cols-3 gap-4">
                 <AgentCard name="selection" image="/assets/hunter.png" />
-                <AgentCard name="Precision" image="/assets/presion.png" />
-                <AgentCard name="Guide" image="" />
+                <AgentCard name="Precision" image="/assets/Precision.png" />
+                <AgentCard name="Guide" image="/assets/guide.png" />
               </div>
             </div>
             <section className="bg-white/10 backdrop-blur-md rounded-2xl p-4 grid grid-cols-[auto_1fr] gap-8">
@@ -391,14 +332,10 @@ export default function Dashboard() {
                 </>
               )}
             </div>
-            <div className="bg-white/10 backdrop-blur-md rounded-2xl p-6 flex flex-col min-h-[480px] relative overflow-hidden">
-              <h3 className="text-orange-400 text-lg mb-2">Your Statistics</h3>
-              <div className="flex justify-center items-center relative z-10">
-                <p className="text-white rounded-full py-16 px-6 w-fit ring-accent/50 ring-4 text-5xl font-bold text-center font-chakra relative z-10">
-                  {formatTime(timeSpent)}
-                </p>
-              </div>
-            </div>
+            
+            {/* Notifications Tab is now here */}
+            <NotificationsTab />
+
           </div>
         </section>
       </main>
@@ -425,13 +362,5 @@ function AgentCard({ name, image }: { name: string; image: string }) {
     <Link to={path} className="bg-orange-700/40 backdrop-blur-md rounded-xl p-4 flex flex-col items-center hover:ring-2 hover:ring-orange-400 transition-all duration-200">
       <img src={image} alt={name} className="w-fit h-32 mb-2" />
     </Link>
-  );
-}
-
-function LockedCard() {
-  return (
-    <div className="bg-gray-700/40 backdrop-blur-md rounded-xl p-4 flex flex-col items-center opacity-60 relative">
-      <img src="/assets/lock.png" alt="Locked Agent" className="w-fit h-32 mb-2 blur-sm" />
-    </div>
   );
 }

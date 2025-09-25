@@ -1,8 +1,10 @@
+// src/pages/Hunter.tsx
 import { useState, useEffect } from 'react';
 import { Header } from '@/components/Header';
 import HeroSection from '@/components/HeroSection';
 import TournamentRow from '@/components/TournamentRow';
 import Sidebar from '@/components/sidebar';
+import TournamentModal from '@/components/TournamentModal'; // Ensure this is imported
 import { trendingTournaments as trendingData } from '@/data/tournaments';
 
 // Defines the structure of a tournament object
@@ -36,12 +38,28 @@ const Index = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  // State for modal management
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
+
+  // This function will be passed to your cards to handle a click
+  const handleCardClick = (tournament: Tournament) => {
+    setSelectedTournament(tournament);
+    setIsModalOpen(true);
+  };
+  
+  // You will also need a function to handle closing the modal
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setSelectedTournament(null);
+  };
+
   useEffect(() => {
     const fetchTournaments = async () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch("http://65.0.56.243:8000/api/master-tournament-details", {
+        const response = await fetch("https://hunter-api.createc.in/api/master-tournament-details", {
           method: "GET",
           headers: {
             Authorization: "Token 71b4dfe9b2eb0ce7d4e892aea998b2bf9b8b42fc",
@@ -134,14 +152,16 @@ const Index = () => {
 
     return (
         <>
-            <TournamentRow title="Live Now" tournaments={liveTournaments} />
+            <TournamentRow title="Live Now" tournaments={liveTournaments} onCardClick={handleCardClick} />
             <TournamentRow
                 title="Upcoming Events"
                 tournaments={upcomingTournaments}
+                onCardClick={handleCardClick}
             />
             <TournamentRow
                 title="Registration Live"
                 tournaments={registrationLive}
+                onCardClick={handleCardClick}
             />
         </>
     );
@@ -161,11 +181,21 @@ const Index = () => {
           <TournamentRow
             title="Trending Tournaments"
             tournaments={trendingTournaments}
+            onCardClick={handleCardClick}
           />
           {renderContent()}
         </div>
         <div className="h-16"></div>
       </main>
+
+      {/* Conditionally render the modal if a tournament is selected */}
+      {selectedTournament && (
+        <TournamentModal
+          tournament={selectedTournament}
+          isOpen={isModalOpen}
+          onClose={handleCloseModal}
+        />
+      )}
     </div>
   );
 };

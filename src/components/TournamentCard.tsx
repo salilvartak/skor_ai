@@ -1,3 +1,4 @@
+// src/components/TournamentCard.tsx
 import { Button } from '@/components/ui/button';
 import { Trophy, Calendar, MapPin } from 'lucide-react';
 
@@ -18,9 +19,10 @@ interface Tournament {
 
 interface TournamentCardProps {
   tournament: Tournament;
+  onClick: () => void; // Add this line
 }
 
-const TournamentCard = ({ tournament }: TournamentCardProps) => {
+const TournamentCard = ({ tournament, onClick }: TournamentCardProps) => {
   // Renders a "LIVE" badge if the tournament is live
   const getStatusBadge = () => {
     if (tournament.status === 'live') {
@@ -62,7 +64,10 @@ const TournamentCard = ({ tournament }: TournamentCardProps) => {
   };
 
   return (
-    <div className="w-80 bg-[#1a1c20] rounded-lg border border-gray-700/50 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-accent/50 hover:-translate-y-1">
+    <div
+      onClick={onClick} // Add the onClick handler here
+      className="w-80 bg-[#1a1c20] rounded-lg border border-gray-700/50 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-accent/50 hover:-translate-y-1 cursor-pointer"
+    >
       {/* Image Container */}
       <div className="relative h-40">
         <img
