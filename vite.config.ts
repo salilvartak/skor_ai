@@ -1,3 +1,5 @@
+// vite.config.ts
+
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
@@ -11,7 +13,8 @@ export default defineConfig(({ mode }) => ({
     // Add this proxy configuration
     proxy: {
       '/api': {
-        target: 'http://65.0.116.163:8000',
+        // Correct the target IP address here
+        target: 'http://65.0.56.243:8000',
         changeOrigin: true,
         secure: false,
       },

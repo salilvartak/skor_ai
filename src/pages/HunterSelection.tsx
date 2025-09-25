@@ -2,7 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { Trophy, Gift, Coins } from 'lucide-react';
-import { Header } from '@/components/Header';
+import {Header} from '@/components/Header';
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -30,8 +30,11 @@ const itemVariants = {
 
 const HunterSelection: React.FC = () => {
   return (
-    <div className="min-h-screen bg-[#121417] font-chakra text-white flex flex-col items-center justify-center relative overflow-hidden p-4">
+    <div>
       <Header />
+
+    <div className="min-h-screen bg-[#121417] font-chakra text-white flex flex-col items-center justify-center relative overflow-hidden p-4">
+      
       
       {/* Background - Faint Grid and Swirling Nebula Effect */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
@@ -118,6 +121,7 @@ const HunterSelection: React.FC = () => {
           text-shadow: 0 0 10px rgba(238, 89, 70, 0.7), 0 0 20px rgba(238, 89, 70, 0.5);
         }
       `}</style>
+    </div>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Header } from '@/components/Header';
+import Header from '@/components/Header';
 import { Card, CardContent } from '@/components/ui/card';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { ScrollArea } from '@/components/ui/scroll-area';

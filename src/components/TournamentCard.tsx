@@ -1,156 +1,105 @@
-import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Play, Users, Trophy, Calendar } from 'lucide-react';
+import { Trophy, Calendar, MapPin } from 'lucide-react';
 
-interface TournamentCardProps {
-  tournament: {
-    id: string;
-    title: string;
-    image: string;
-    category: string;
-    prizePool: string;
-    participants: number;
-    status: 'live' | 'upcoming' | 'registration' | 'ended';
-    startDate?: string;
-    duration?: string;
-    previewVideo?: string;
-  };
-  size?: 'small' | 'medium' | 'large';
-  onClick?: () => void;
+// The interface for the tournament object
+interface Tournament {
+  id: string;
+  title: string;
+  image: string;
+  category: string;
+  prizePool: string;
+  participants: number;
+  status: 'live' | 'upcoming' | 'registration' | 'ended';
+  startDate?: string;
+  location?: string;
+  registration_link?: string; // Added registration_link
+  tournament_location?: string;
 }
 
-const fallbackVideos = [
-  '/assets/vid/apex.mp4',
-  '/assets/vid/vct.mp4',
-  '/assets/vid/cs.mp4',
-];
+interface TournamentCardProps {
+  tournament: Tournament;
+}
 
-const TournamentCard = ({ tournament, size = 'medium', onClick }: TournamentCardProps) => {
-  const [isHovered, setIsHovered] = useState(false);
-
-  const stringHash = (str: string) => {
-    let hash = 0;
-    for (let i = 0; i < str.length; i++) {
-      const char = str.charCodeAt(i);
-      hash = (hash << 5) - hash + char;
+const TournamentCard = ({ tournament }: TournamentCardProps) => {
+  // Renders a "LIVE" badge if the tournament is live
+  const getStatusBadge = () => {
+    if (tournament.status === 'live') {
+      return (
+        <div className="absolute top-3 left-3 z-10">
+          <div className="bg-red-600/90 px-3 py-1 rounded-md text-xs font-bold text-white flex items-center space-x-1.5 shadow-lg">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
+            <span>LIVE</span>
+          </div>
+        </div>
+      );
     }
-    return Math.abs(hash);
+    return null;
   };
 
-  const videoSrc = tournament.previewVideo
-    ? tournament.previewVideo
-    : fallbackVideos[stringHash(tournament.id) % fallbackVideos.length];
+  // Determines the text for the CTA button and wraps it in a link
+  const getCtaButton = () => {
+    let text = 'View Details';
+    if (tournament.status === 'live') text = 'Watch Now';
+    if (tournament.status === 'registration') text = 'Join Tournament';
+    if (tournament.status === 'ended') text = 'View Results';
 
-  const getSizeClasses = () => {
-    switch (size) {
-      case 'small':
-        return 'w-48 h-32';
-      case 'large':
-        return 'w-80 h-48';
-      default:
-        return 'w-80 h-48';
+    // If there's no registration link, render a disabled button
+    if (!tournament.registration_link) {
+        return (
+            <Button disabled className="w-full mt-5 bg-accent/50 text-white font-bold py-3 rounded-lg">
+                {text}
+            </Button>
+        )
     }
-  };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'live':
-        return 'bg-red-500 bg-opacity-60';
-      case 'upcoming':
-        return 'bg-yellow-500 bg-opacity-60';
-      case 'registration':
-        return 'bg-green-500 bg-opacity-60';
-      case 'ended':
-        return 'bg-gray-500 bg-opacity-60';
-      default:
-        return 'bg-muted bg-opacity-60';
-    }
-  };
-
-  const getStatusLabel = (status: string) => {
-    switch (status) {
-      case 'live':
-        return 'LIVE';
-      case 'upcoming':
-        return 'UPCOMING';
-      case 'registration':
-        return 'OPEN';
-      case 'ended':
-        return 'ENDED';
-      default:
-        return status.toUpperCase();
-    }
+    return (
+      <a href={tournament.registration_link} target="_blank" rel="noopener noreferrer" className="block">
+        <Button className="w-full mt-5 bg-accent hover:bg-accent/80 text-white font-bold py-3 rounded-lg transition-transform hover:scale-105">
+          {text}
+        </Button>
+      </a>
+    );
   };
 
   return (
-    // Adjust the padding of this outer container to ensure there is enough space.
-    // This is the container that must not clip the content.
-    <div 
-      className={`relative rounded-lg overflow-visible transition-all duration-300 hover:z-20`}
-      style={{
-        width: size === 'small' ? '192px' : '320px',
-        height: size === 'small' ? '128px' : '192px',
-        // Increased padding to accommodate a scale of 1.25 (125%)
-        padding: size === 'small' ? '8px' : '4px',
-      }}
-    >
-      <div
-        className={`relative w-full h-full rounded-lg overflow-hidden cursor-pointer transition-transform duration-300 hover:scale-105 hover:shadow-card`}
-        onMouseEnter={() => setIsHovered(true)}
-        onMouseLeave={() => setIsHovered(false)}
-        onClick={onClick}
-      >
-        {/* Container for the image and video to handle the fade effect */}
-        <div className="relative w-full h-full">
-          {/* Background Image - will fade out on hover */}
-          <div 
-            className={`absolute inset-0 bg-cover bg-center transition-opacity duration-300 ${isHovered ? 'opacity-0' : 'opacity-100'}`}
-            style={{ backgroundImage: `url(${tournament.image})` }}
-          />
-          
-          {/* Video - will fade in on hover */}
-          <video
-            className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-300 ${isHovered && videoSrc ? 'opacity-100' : 'opacity-0'}`}
-            src={videoSrc}
-            autoPlay
-            loop
-            muted
-            playsInline
-          />
+    <div className="w-80 bg-[#1a1c20] rounded-lg border border-gray-700/50 overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-accent/50 hover:-translate-y-1">
+      {/* Image Container */}
+      <div className="relative h-40">
+        <img
+          src={tournament.image}
+          alt={tournament.title}
+          className="h-full w-full object-cover"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent" />
+        {getStatusBadge()}
+      </div>
+
+      {/* Content Container */}
+      <div className="p-4">
+        <h3 className="text-lg font-bold text-white truncate" title={tournament.title}>
+          {tournament.title}
+        </h3>
+        <p className="text-sm text-gray-400 mb-4">{tournament.category}</p>
+
+        <div className="space-y-3 text-sm">
+          <div className="flex items-center text-white">
+            <Trophy className="h-4 w-4 mr-3 text-accent" />
+            <span className="font-semibold">{tournament.prizePool}</span>
+            <span className="text-gray-400 ml-1.5">- Prize Pool</span>
+          </div>
+          <div className="flex items-center text-white">
+            <Calendar className="h-4 w-4 mr-3 text-accent" />
+            <span className="font-semibold">{tournament.startDate}</span>
+          </div>
+          {tournament.location && (
+            <div className="flex items-center text-white">
+              <MapPin className="h-4 w-4 mr-3 text-accent" />
+              <span className="font-semibold">{tournament.location}</span>
+            </div>
+          )}
         </div>
 
-        {/* Overlay */}
-        <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent" />
-        
-        {/* Status Badge */}
-        <div className="absolute top-2 left-2 z-10">
-          <div className={`${getStatusColor(tournament.status)} px-2 py-1 rounded-md text-xs font-bold text-white flex items-center space-x-1`}>
-            {tournament.status === 'live' && <div className="w-2 h-2 bg-white rounded-full animate-pulse" />}
-            <span>{getStatusLabel(tournament.status)}</span>
-          </div>
-        </div>
-
-        {/* Content */}
-        <div className="absolute bottom-0 left-0 right-0 p-3 text-white">
-          <div className="space-y-1">
-            {/* Title */}
-            <h3 className="font-bold text-sm leading-tight line-clamp-2">
-              {tournament.title}
-            </h3>
-          </div>
-        </div>
-
-        {/* Hover Actions */}
-        {isHovered && (
-          <div className="absolute inset-0 bg-background/90 flex items-center justify-center animate-scale-in">
-            <Button 
-              size="lg" 
-              className="bg-accent hover:bg-accent"
-            >
-              {tournament.status === 'live' ? 'Watch' : tournament.status === 'registration' ? 'Join' : 'View'}
-            </Button>
-          </div>
-        )}
+        {getCtaButton()}
       </div>
     </div>
   );

@@ -2,7 +2,6 @@ import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import TournamentCard from './TournamentCard';
-import TournamentModal from './TournamentModal';
 
 interface Tournament {
   id: string;
@@ -14,6 +13,8 @@ interface Tournament {
   status: 'live' | 'upcoming' | 'registration' | 'ended';
   startDate?: string;
   duration?: string;
+  location?: string;
+  tournament_location?: string;
 }
 
 interface TournamentRowProps {
@@ -26,13 +27,11 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
   const scrollRef = useRef<HTMLDivElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(true);
-  const [selectedTournament, setSelectedTournament] = useState<Tournament | null>(null);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const scroll = (direction: 'left' | 'right') => {
     if (!scrollRef.current) return;
     
-    const scrollAmount = 320; // Roughly 1 card width + gap
+    const scrollAmount = 320; 
     const newScrollLeft = scrollRef.current.scrollLeft + (direction === 'left' ? -scrollAmount : scrollAmount);
     
     scrollRef.current.scrollTo({
@@ -49,15 +48,24 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
     setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 10);
   };
 
-  const handleTournamentClick = (tournament: Tournament) => {
-    setSelectedTournament(tournament);
-    setIsModalOpen(true);
-  };
+  if (tournaments.length === 0) {
+    return (
+      <section className="py-4">
+        <div className="px-4 lg:px-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-xl font-bold text-foreground">{title}</h2>
+          </div>
+          <div className="text-center py-10 text-gray-500 italic">
+            No {title.toLowerCase()} at the moment. Check back soon!
+          </div>
+        </div>
+      </section>
+    );
+  }
 
   return (
     <section className="py-4">
       <div className="px-4 lg:px-8">
-        {/* Section Header */}
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-foreground">{title}</h2>
           {showSeeAll && (
@@ -71,9 +79,7 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
           )}
         </div>
 
-        {/* Tournament Cards Container */}
         <div className="relative group">
-          {/* Left Arrow */}
           {canScrollLeft && (
             <Button
               variant="ghost"
@@ -85,7 +91,6 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
             </Button>
           )}
 
-          {/* Right Arrow */}
           {canScrollRight && (
             <Button
               variant="ghost"
@@ -97,31 +102,21 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true }: TournamentRowP
             </Button>
           )}
 
-          {/* Scrollable Cards */}
+          {/* Added padding and negative margin to prevent clipping on hover */}
           <div
             ref={scrollRef}
             onScroll={handleScroll}
-            className="flex space-x-3 overflow-x-auto scrollbar-hide scroll-smooth pb-2"
+            className="flex space-x-3 overflow-x-auto scrollbar-hide scroll-smooth pb-2 pt-4 -mt-4"
             style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
           >
             {tournaments.map((tournament) => (
               <div key={tournament.id} className="flex-shrink-0">
-                <TournamentCard 
-                  tournament={tournament} 
-                  onClick={() => handleTournamentClick(tournament)}
-                />
+                <TournamentCard tournament={tournament} />
               </div>
             ))}
           </div>
         </div>
       </div>
-
-      {/* Tournament Modal */}
-      <TournamentModal 
-        tournament={selectedTournament}
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-      />
     </section>
   );
 };

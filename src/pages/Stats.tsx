@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Header } from "@/components/Header";
+import  Header from "@/components/Header";
 import StatsResults from "@/components/StatsResult";
 import { Loader2 } from "lucide-react";
 

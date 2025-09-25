@@ -12,6 +12,7 @@ export interface Tournament {
   status: 'live' | 'upcoming' | 'registration' | 'ended';
   startDate?: string;
   duration?: string;
+  registration_link?: string; // Added registration_link
 }
 
 export const trendingTournaments: Tournament[] = [
@@ -24,7 +25,8 @@ export const trendingTournaments: Tournament[] = [
     participants: 16,
     status: 'live',
     startDate: 'Jan 15, 2024',
-    duration: '5 days'
+    duration: '5 days',
+    registration_link: '#' // Added placeholder link
   },
   {
     id: 'trending-2',
@@ -35,7 +37,8 @@ export const trendingTournaments: Tournament[] = [
     participants: 24,
     status: 'upcoming',
     startDate: 'Jan 20, 2024',
-    duration: '7 days'
+    duration: '7 days',
+    registration_link: '#' // Added placeholder link
   },
   {
     id: 'trending-3',
@@ -46,7 +49,8 @@ export const trendingTournaments: Tournament[] = [
     participants: 32,
     status: 'registration',
     startDate: 'Jan 25, 2024',
-    duration: '3 days'
+    duration: '3 days',
+    registration_link: '#' // Added placeholder link
   },
   {
     id: 'trending-4',
@@ -57,7 +61,8 @@ export const trendingTournaments: Tournament[] = [
     participants: 20,
     status: 'upcoming',
     startDate: 'Feb 1, 2024',
-    duration: '4 days'
+    duration: '4 days',
+    registration_link: '#' // Added placeholder link
   },
   {
     id: 'trending-5',
@@ -68,7 +73,8 @@ export const trendingTournaments: Tournament[] = [
     participants: 16,
     status: 'registration',
     startDate: 'Feb 5, 2024',
-    duration: '6 days'
+    duration: '6 days',
+    registration_link: '#' // Added placeholder link
   },
   {
     id: 'trending-6',
@@ -79,214 +85,9 @@ export const trendingTournaments: Tournament[] = [
     participants: 12,
     status: 'upcoming',
     startDate: 'Feb 10, 2024',
-    duration: '8 days'
+    duration: '8 days',
+    registration_link: '#' // Added placeholder link
   }
 ];
 
-export const liveTournaments: Tournament[] = [
-  {
-    id: 'live-1',
-    title: 'VCT Pacific Showdown',
-    image: tournament2,
-    category: 'VALORANT',
-    prizePool: '$100,000',
-    participants: 8,
-    status: 'live',
-    duration: '2 days'
-  },
-  {
-    id: 'live-2',
-    title: 'CS2 Elite Series',
-    image: tournament3,
-    category: 'CS2',
-    prizePool: '$200,000',
-    participants: 16,
-    status: 'live',
-    duration: '3 days'
-  },
-  {
-    id: 'live-3',
-    title: 'Apex Legends Pro League',
-    image: tournament1,
-    category: 'Apex Legends',
-    prizePool: '$180,000',
-    participants: 20,
-    status: 'live',
-    duration: '4 days'
-  },
-  {
-    id: 'live-4',
-    title: 'Fortnite Championship',
-    image: tournament2,
-    category: 'Fortnite',
-    prizePool: '$350,000',
-    participants: 100,
-    status: 'live',
-    duration: '1 day'
-  }
-];
-
-export const upcomingTournaments: Tournament[] = [
-  {
-    id: 'upcoming-1',
-    title: 'World Championship 2024',
-    image: tournament3,
-    category: 'VALORANT',
-    prizePool: '$1,000,000',
-    participants: 24,
-    status: 'upcoming',
-    startDate: 'Mar 1, 2024',
-    duration: '14 days'
-  },
-  {
-    id: 'upcoming-2',
-    title: 'CS2 Global Masters',
-    image: tournament1,
-    category: 'CS2',
-    prizePool: '$800,000',
-    participants: 32,
-    status: 'upcoming',
-    startDate: 'Feb 15, 2024',
-    duration: '10 days'
-  },
-  {
-    id: 'upcoming-3',
-    title: 'International Dota Championship',
-    image: tournament2,
-    category: 'Dota 2',
-    prizePool: '$2,500,000',
-    participants: 18,
-    status: 'upcoming',
-    startDate: 'Mar 15, 2024',
-    duration: '12 days'
-  },
-  {
-    id: 'upcoming-4',
-    title: 'Call of Duty World League',
-    image: tournament3,
-    category: 'Call of Duty',
-    prizePool: '$600,000',
-    participants: 16,
-    status: 'upcoming',
-    startDate: 'Feb 28, 2024',
-    duration: '5 days'
-  }
-];
-
-export const yourTournaments: Tournament[] = [
-  {
-    id: 'your-1',
-    title: 'Weekly VALORANT Cup',
-    image: tournament1,
-    category: 'VALORANT',
-    prizePool: '$5,000',
-    participants: 64,
-    status: 'registration',
-    startDate: 'This Weekend',
-    duration: '2 days'
-  },
-  {
-    id: 'your-2',
-    title: 'Amateur CS2 League',
-    image: tournament2,
-    category: 'CS2',
-    prizePool: '$2,500',
-    participants: 32,
-    status: 'upcoming',
-    startDate: 'Next Week',
-    duration: '3 days'
-  },
-  {
-    id: 'your-3',
-    title: 'Local Esports Tournament',
-    image: tournament3,
-    category: 'Mixed',
-    prizePool: '$1,000',
-    participants: 48,
-    status: 'ended',
-    startDate: 'Last Week',
-    duration: '1 day'
-  }
-];
-
-export const esportsChampionships: Tournament[] = [
-  {
-    id: 'esports-1',
-    title: 'Global Esports Championship',
-    image: tournament2,
-    category: 'Multi-Game',
-    prizePool: '$5,000,000',
-    participants: 128,
-    status: 'upcoming',
-    startDate: 'Jun 1, 2024',
-    duration: '30 days'
-  },
-  {
-    id: 'esports-2',
-    title: 'International Gaming Olympics',
-    image: tournament3,
-    category: 'Multi-Game',
-    prizePool: '$3,000,000',
-    participants: 200,
-    status: 'registration',
-    startDate: 'Apr 1, 2024',
-    duration: '21 days'
-  },
-  {
-    id: 'esports-3',
-    title: 'Professional Gaming League',
-    image: tournament1,
-    category: 'Multi-Game',
-    prizePool: '$2,000,000',
-    participants: 96,
-    status: 'upcoming',
-    startDate: 'May 1, 2024',
-    duration: '15 days'
-  }
-];
-
-export const amateurLeagues: Tournament[] = [
-  {
-    id: 'amateur-1',
-    title: 'Beginner VALORANT League',
-    image: tournament1,
-    category: 'VALORANT',
-    prizePool: '$1,000',
-    participants: 128,
-    status: 'registration',
-    startDate: 'Every Month',
-    duration: '1 week'
-  },
-  {
-    id: 'amateur-2',
-    title: 'Student Gaming Championship',
-    image: tournament2,
-    category: 'Mixed',
-    prizePool: '$2,500',
-    participants: 256,
-    status: 'upcoming',
-    startDate: 'Feb 20, 2024',
-    duration: '5 days'
-  },
-  {
-    id: 'amateur-3',
-    title: 'Community Cup Series',
-    image: tournament3,
-    category: 'Mixed',
-    prizePool: '$500',
-    participants: 64,
-    status: 'registration',
-    startDate: 'Weekly',
-    duration: '2 days'
-  }
-];
-
-// Combine all tournament arrays into one and export it
-export const allTournaments: Tournament[] = [
-  ...trendingTournaments,
-  ...liveTournaments,
-  ...upcomingTournaments,
-  ...yourTournaments,
-  ...esportsChampionships,
-  ...amateurLeagues
-];
+// ... (rest of the file remains the same)
