@@ -195,7 +195,7 @@ const HeroSection = () => {
             onClick={() => setIsMuted(!isMuted)}
             className="bg-#DA0B08/20 hover:bg-#DA0B08/40 backdrop-blur-sm border border-border/50"
           >
-            {isMuted ? <VolumeX className="h-5 w-5 text-white" /> : <Volume2 className="h-5 w-5 text-white" />}
+            {isMuted ? <VolumeX className="h-8 w-8 text-white" /> : <Volume2 className="h-8 w-8 text-white" />}
           </Button>
         </div>
       </div>

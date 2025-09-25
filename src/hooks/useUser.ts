@@ -1,22 +1,19 @@
-import { useEffect, useState } from 'react';
+import { useState, useEffect } from 'react';
+import { onAuthStateChanged, User } from 'firebase/auth';
+import { auth } from '@/firebase';
 
 export const useUser = () => {
-  const [user, setUser] = useState<{ name?: string; email?: string; hasCompletedProfile: boolean }>({
-    hasCompletedProfile: false,
-  });
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Simulate loading user from local storage or backend
-    const stored = localStorage.getItem('user');
-    if (stored) {
-      setUser(JSON.parse(stored));
-    }
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      setUser(user);
+      setLoading(false);
+    });
+
+    return () => unsubscribe();
   }, []);
 
-  const saveUser = (data: any) => {
-    localStorage.setItem('user', JSON.stringify(data));
-    setUser(data);
-  };
-
-  return { user, saveUser };
+  return { user, loading };
 };

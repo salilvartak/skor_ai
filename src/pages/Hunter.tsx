@@ -41,7 +41,7 @@ const Index = () => {
       try {
         setLoading(true);
         setError(null);
-        const response = await fetch("/api/master-tournament-details", {
+        const response = await fetch("http://65.0.56.243:8000/api/master-tournament-details", {
           method: "GET",
           headers: {
             Authorization: "Token 71b4dfe9b2eb0ce7d4e892aea998b2bf9b8b42fc",
