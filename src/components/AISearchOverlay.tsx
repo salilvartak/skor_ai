@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { Search, X } from 'lucide-react';
 import TournamentCard from './TournamentCard';
+import { under } from '@/data/under'; // Import the new data source
 
 // Defines the structure of a tournament object
 interface Tournament {
@@ -40,7 +41,7 @@ const AISearchOverlay = ({
     "Upcoming BGMI tournaments",
     "Trending Tournaments",
     "Live tournaments right now",
-    "Tournaments under $50,000",
+    "Tournaments under 50K",
   ];
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -60,12 +61,8 @@ const AISearchOverlay = ({
       const lowerCaseQuery = searchQuery.toLowerCase();
 
       // Scenarios for "tournaments under 50,000"
-      if (lowerCaseQuery.includes('under 50k') || lowerCaseQuery.includes('< 50000') || lowerCaseQuery.includes('less than 50000') || lowerCaseQuery.includes('under 50000')) {
-        const allTournaments = [...liveTournaments, ...upcomingTournaments];
-        results = allTournaments.filter(t => {
-            const prizePoolValue = parseInt(t.prizePool.replace(/[^0-9]/g, ''));
-            return prizePoolValue < 50000;
-        });
+      if (lowerCaseQuery.includes('under 50k') || lowerCaseQuery.includes('< 50,000') || lowerCaseQuery.includes('less than 50000') || lowerCaseQuery.includes('under 50000')) {
+        results = under; // Use the imported 'under' data
       } else {
         // Existing search cases
         switch (lowerCaseQuery) {

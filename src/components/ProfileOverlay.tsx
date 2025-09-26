@@ -3,8 +3,6 @@ import { useUser } from '@/hooks/useUser';
 import {
   Dialog,
   DialogContent,
-  DialogHeader,
-  DialogTitle,
 } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
@@ -30,6 +28,7 @@ import {
   Camera,
   LogOut,
   ChevronRight,
+  Plus,
 } from 'lucide-react';
 
 interface ProfileOverlayProps {
@@ -38,7 +37,6 @@ interface ProfileOverlayProps {
   onLogout: () => void;
 }
 
-// A reusable component for each setting row to maintain consistency
 const SettingsRow = ({ label, children }: { label: string, children: React.ReactNode }) => (
   <div className="flex items-center justify-between p-4 rounded-lg transition-colors hover:bg-white/5">
     <Label className="text-gray-300">{label}</Label>
@@ -53,6 +51,19 @@ export const ProfileOverlay: React.FC<ProfileOverlayProps> = ({
 }) => {
   const [activeTab, setActiveTab] = useState('general');
   const { user } = useUser();
+  const [customInstruction, setCustomInstruction] = useState('');
+
+ const presetInstructions = [
+    "Coach",
+    "Witty",
+    "Professional",
+    "Encouraging",
+    "Novice-friendly",
+  ];
+
+  const handlePresetClick = (preset: string) => {
+    setCustomInstruction(prev => prev ? `${prev}, ${preset}` : preset);
+  };
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
@@ -94,8 +105,11 @@ export const ProfileOverlay: React.FC<ProfileOverlayProps> = ({
           </Button>
         </aside>
 
-        {/* Main Content */}
-        <main className="w-3/4 p-8 overflow-y-auto">
+        {/* Vertical Separator */}
+        <Separator orientation="vertical" className="bg-white/10" />
+
+        {/* Main Content with styled scrollbar */}
+        <main className="w-3/4 p-8 overflow-y-auto scrollbar-thin scrollbar-thumb-accent scrollbar-track-transparent">
           <Tabs value={activeTab}>
             <TabsContent value="general" className="mt-0">
               <h2 className="text-2xl font-semibold mb-6">General</h2>
@@ -152,7 +166,26 @@ export const ProfileOverlay: React.FC<ProfileOverlayProps> = ({
                <div className="space-y-6">
                 <div className="p-4">
                   <Label htmlFor="custom-instructions">Custom instruction (for AI)</Label>
-                  <Textarea id="custom-instructions" placeholder="e.g., I am a casual gamer..." className="mt-2 bg-white/5 border-white/20 min-h-[100px]" />
+                  <div className="flex flex-wrap gap-2 my-3">
+                    {presetInstructions.map((preset) => (
+                      <Button
+                        key={preset}
+                        variant="outline"
+                        className="bg-white/10 border-white/20 hover:bg-white/20"
+                        onClick={() => handlePresetClick(preset)}
+                      >
+                        <Plus className="mr-2 h-4 w-4" />
+                        {preset}
+                      </Button>
+                    ))}
+                  </div>
+                  <Textarea 
+                    id="custom-instructions" 
+                    placeholder="e.g., I am a casual gamer..." 
+                    className="mt-2 bg-white/5 border-white/20 min-h-[100px]"
+                    value={customInstruction}
+                    onChange={(e) => setCustomInstruction(e.target.value)}
+                  />
                 </div>
                 <Separator className="bg-white/10" />
                 <div className="p-4 space-y-4">
