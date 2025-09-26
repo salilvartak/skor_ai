@@ -48,7 +48,7 @@ export const Header = ({ liveTournaments = [], upcomingTournaments = [], trendin
               <img src="/assets/logo.png" alt="SkorAI" className="h-12" />
             </div>
             
-            {/* Navigation Menu */}
+            {/* Navigation Menu 
             <nav className="hidden md:flex items-center space-x-6">
               <Button variant="ghost" className="text-white hover:bg-accent/80">
                 Tournaments
@@ -62,7 +62,7 @@ export const Header = ({ liveTournaments = [], upcomingTournaments = [], trendin
               <Button variant="ghost" className="text-white hover:bg-accent/80">
                 My Events
               </Button>
-            </nav>
+            </nav>*/}
           </div>
 
           {/* Right Side Actions */}

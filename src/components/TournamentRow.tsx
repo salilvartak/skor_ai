@@ -2,6 +2,7 @@ import { useRef, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { ChevronLeft, ChevronRight, ExternalLink } from 'lucide-react';
 import TournamentCard from './TournamentCard';
+import { Link } from 'react-router-dom'; // Import Link
 
 interface Tournament {
   id: string;
@@ -21,7 +22,6 @@ interface TournamentRowProps {
   title: string;
   tournaments: Tournament[];
   showSeeAll?: boolean;
-  // This prop is now required, as shown in the error message
   onCardClick: (tournament: Tournament) => void;
 }
 
@@ -71,13 +71,15 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true, onCardClick }: T
         <div className="flex items-center justify-between mb-4">
           <h2 className="text-xl font-bold text-foreground">{title}</h2>
           {showSeeAll && (
-            <Button 
-              variant="ghost" 
-              className="text-muted-foreground hover:text-black group"
-            >
-              See All
-              <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </Button>
+            <Link to={`/tournaments/${title.toLowerCase()}`}>
+              <Button 
+                variant="ghost" 
+                className="text-muted-foreground hover:text-black group"
+              >
+                See All
+                <ExternalLink className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
           )}
         </div>
 
@@ -112,7 +114,6 @@ const TournamentRow = ({ title, tournaments, showSeeAll = true, onCardClick }: T
           >
             {tournaments.map((tournament) => (
               <div key={tournament.id} className="flex-shrink-0">
-                {/* Pass the onClick handler to each card */}
                 <TournamentCard 
                     tournament={tournament} 
                     onClick={() => onCardClick(tournament)} 

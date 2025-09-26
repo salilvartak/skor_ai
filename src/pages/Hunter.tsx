@@ -36,7 +36,7 @@ const getGameName = (gameId: number) => {
       return "CS2";
     case 4:
       return "Valorant";
-    case 5:
+    case 6:
       return "Dota 2";
     default:
       return `Game ID: ${gameId}`;
@@ -51,7 +51,7 @@ const getGameImage = (gameId: number) => {
       return "/assets/CS2.jpg";
     case 4:
       return "/assets/vct.jpg";
-    case 5:
+    case 6:
       return "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/570/capsule_616x353.jpg?t=1757000652";
     default:
       return "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg"; // Default image
@@ -155,7 +155,7 @@ const Index = () => {
             case 4:
               valorant.push(tournament);
               break;
-            case 5:
+            case 6:
               dota2.push(tournament);
               break;
           }

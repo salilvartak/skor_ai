@@ -28,6 +28,7 @@ import CouponDetails from "./pages/CouponDetails";
 import Airdrops from "./pages/Airdrops";
 import AirdropDetails from "./pages/AirdropDetails";
 import HunterSelection from "./pages/HunterSelection";
+import GameTournamentsPage from "./pages/GameTournamentsPage"; // Import the new component
 
 const queryClient = new QueryClient();
 
@@ -73,6 +74,7 @@ function App() {
       
       <Route path="/selection" element={<HunterSelection />} />
       <Route path="/selection/hunter" element={<Hunter />} />
+      <Route path="/tournaments/:game" element={<GameTournamentsPage />} /> {/* Add this route */}
       <Route path="/selection/coupons" element={<Coupons />} />
       <Route path="/coupons/:id" element={<CouponDetails />} />
       <Route path="/selection/airdrops" element={<Airdrops />} />

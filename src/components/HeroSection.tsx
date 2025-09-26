@@ -13,39 +13,43 @@ interface Tournament {
   category: string;
   prizePool: string;
   status: 'live' | 'upcoming' | 'registration';
+  link: string;
 }
 
 // 3. Add a unique video URL for each tournament object
 const featuredTournaments: Tournament[] = [
   {
     id: '1',
-    title: 'VCT Pacific Championship',
-    description: 'The ultimate VALORANT tournament featuring the best teams from Asia-Pacific region competing for the championship title and a massive prize pool.',
+    title: 'PUBG Mobile Super League - Southeast Asia Fall 2025',
+    description: 'PUBG Mobile Super League - Southeast Asia (also known as PMSL SEA) is the professional PUBG Mobile partnership league in the Southeast Asia Southeast Asia region. 2025 Fall season consists of partner teams hand-selected by Level Infinite and Hero Esports as well as top teams from 2025 PMNC Fall, fighting for spots into the PUBG Mobile Global Championship 2025 PMGC.',
     image: heroImage,
-    video: '/assets/vid/vct.mp4',
-    category: 'VALORANT',
-    prizePool: '$250,000',
-    status: 'live'
+    video: '/assets/vid/pubg.mp4',
+    category: 'PUBG Mobile',
+    prizePool: '$200,000',
+    status: 'live',
+    link:'https://www.youtube.com/watch?v=z0rXwl77ik4'
   },
   {
     id: '2',
-    title: 'Counter-Strike Global Elite',
-    description: 'Professional CS2 tournament with world-class teams battling it out in intense matches. Join the action or compete for glory.',
+    title: 'VALORANT Champions 2025',
+    description: 'VALORANT Champions 2025 is the global esports showdown in Paris, where the top 16 teams from the VCT circuit face off in group & playoff stages to crown the world champion.',
     image: heroImage,
-    video: '/assets/vid/cs.mp4',
-    category: 'CS2',
+    video: '/assets/vid/vct.mp4',
+    category: 'Valorant',
     prizePool: '$500,000',
-    status: 'upcoming'
+    status: 'upcoming',
+    link:'https://www.youtube.com/watch?v=UFHDck0sObk'
   },
   {
     id: '3',
-    title: 'Apex Legends Championship',
-    description: 'Battle royale championship featuring top-tier teams from around the globe. Experience the thrill of competitive Apex Legends.',
+    title: 'MPL Philippines Season 16',
+    description: 'Mobile Legends Professional League Philippines (also known as MPL Philippines or MPL PH) is a professional league in the Philippines Philippines. For the ninth consecutive season, the league adopts a franchise system.',
     image: heroImage,
-    video: '/assets/vid/apex.mp4',
-    category: 'Apex Legends',
+    video: '/assets/vid/ml.mp4',
+    category: 'Mobile Legends',
     prizePool: '$300,000',
-    status: 'registration'
+    status: 'live',
+    link:'https://www.youtube.com/watch?v=j_A85mqOSwo'
   }
 ];
 
@@ -153,14 +157,16 @@ const HeroSection = () => {
 
           {/* Action Buttons */}
           <div className="flex items-center space-x-3 pt-2">
+            <div onClick={() => window.open(currentTournament.link, '_blank')}>
             <Button 
               size="lg" 
-              className="bg-accent hover:opacity-90 transform hover:scale-105 transition-all duration-200 px-6 py-2 text-base font-semibold shadow-glow"
+              className="bg-accent hover:opacity-90 transform hover:bg-accent hover:scale-105 transition-all duration-200 px-6 py-2 text-base font-semibold shadow-glow"
             >
               <Play className="mr-2 h-5 w-5" />
               {getActionButton(currentTournament.status)}
             </Button>
-            
+            </div>
+            <div onClick={() => window.open(currentTournament.link, '_blank')}>
             <Button 
               variant="secondary" 
               size="lg"
@@ -169,6 +175,7 @@ const HeroSection = () => {
               <Info className="mr-2 h-5 w-5" />
               More Info
             </Button>
+            </div>
           </div>
         </div>
 
