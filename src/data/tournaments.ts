@@ -19,13 +19,13 @@ export interface Tournament {
 export const trendingTournaments: Tournament[] = [
   {
     id: 'trending-1',
-    title: 'Valorant Champions 2025',
-    image: "/assets/vct.jpg",
-    category: 'VALORANT',
-    prizePool: '$2,250,000',
+    title: 'Indonesia Kings Laga Fall 2025',
+    image: "https://i.ytimg.com/vi/P1RnGCsVq2k/maxresdefault.jpg",
+    category: 'Honor of Kings',
+    prizePool: '$60,000',
     participants: 16,
-    status: 'live',
-    startDate: 'Sep 15, 2025',
+    status: 'upcoming',
+    startDate: 'Nov 15, 2025',
     duration: '12 days',
     registration_link: 'https://valorantesports.com/'
   },
