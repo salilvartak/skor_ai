@@ -31,7 +31,7 @@ export const trendingTournaments: Tournament[] = [
   },
   {
     id: 'trending-2',
-    title: 'IEM Rio 2025',
+    title: 'AORUS League 2025',
     image: "/assets/CS2.jpg",
     category: 'CS2',
     prizePool: '$20,000',
@@ -39,7 +39,7 @@ export const trendingTournaments: Tournament[] = [
     status: 'upcoming',
     startDate: 'Oct 10, 2025',
     duration: '7 days',
-    registration_link: 'https://pro.eslgaming.com/cs/'
+    registration_link: 'https://www.twitch.tv/videos/2574690854'
   },
   {
     id: 'trending-3',
