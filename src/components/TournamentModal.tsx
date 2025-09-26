@@ -1,13 +1,6 @@
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from '@/components/ui/dialog';
-import { Button } from '@/components/ui/button';
-import { Trophy, Calendar, MapPin, AlignLeft, List, Newspaper } from 'lucide-react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+// src/components/TournamentModal.tsx
+import React from 'react';
+import { X, Calendar, MapPin, ExternalLink } from 'lucide-react';
 
 interface Tournament {
   id: string;
@@ -18,187 +11,116 @@ interface Tournament {
   participants: number;
   status: 'live' | 'upcoming' | 'registration' | 'ended';
   startDate?: string;
+  duration?: string;
   location?: string;
   registration_link?: string;
   tournament_start_date?: string;
   tournament_end_date?: string;
   registration_start_date?: string;
   registration_end_date?: string;
-  tournament_location?: string;
 }
 
 interface TournamentModalProps {
-  tournament: Tournament | null;
+  tournament: Tournament;
   isOpen: boolean;
   onClose: () => void;
 }
 
-// Hardcoded showcase data
-const detailedTournamentInfo = {
-  overview:
-    "The Skor Elite  Championship is the ultimate battle for glory, featuring the top teams from across the nation. Compete for a massive prize pool and earn your place among the legends of the game. The tournament spans three days of intense action, culminating in a grand finale to crown the champion.",
-  schedule: [
-    { date: 'Day 1', event: 'Group Stage - Round 1', time: '10:00 AM IST' },
-    { date: 'Day 1', event: 'Group Stage - Round 2', time: '02:00 PM IST' },
-    { date: 'Day 2', event: 'Semifinals - Group A', time: '11:00 AM IST' },
-    { date: 'Day 2', event: 'Semifinals - Group B', time: '03:00 PM IST' },
-    { date: 'Day 3', event: 'Grand Finale', time: '05:00 PM IST' },
-  ],
-  rules: [
-    "All players must register with their in-game name (IGN).",
-    "No use of third-party software or hacks is allowed. Violation will result in immediate disqualification.",
-    "Teams must consist of four players.",
-    "Communication is restricted to team members only.",
-    "Decisions made by tournament organizers are final.",
-  ],
-};
+const TournamentModal: React.FC<TournamentModalProps> = ({ tournament, isOpen, onClose }) => {
+  if (!isOpen) return null;
 
-const TournamentModal = ({ tournament, isOpen, onClose }: TournamentModalProps) => {
-  if (!tournament) {
-    return null;
-  }
-
-  const getStatusBadge = () => {
-    if (tournament.status === 'live') {
-      return (
-        <div className="absolute top-4 left-4 z-10">
-          <div className="bg-red-600/90 px-3 py-1 rounded-md text-xs font-bold text-white flex items-center space-x-1.5 shadow-lg">
-            <div className="w-2 h-2 bg-white rounded-full animate-pulse" />
-            <span>LIVE</span>
-          </div>
-        </div>
-      );
-    }
-    return null;
+  const formatDate = (dateString: string | undefined) => {
+    if (!dateString) return 'TBA';
+    return new Date(dateString).toLocaleDateString('en-US', {
+      year: 'numeric', month: 'long', day: 'numeric'
+    });
   };
 
-  const getCtaButton = () => {
-    let text = 'View Details';
-    if (tournament.status === 'live') text = 'Watch Now';
-    if (tournament.status === 'registration') text = 'Join Tournament';
-    if (tournament.status === 'ended') text = 'View Results';
-
-    if (!tournament.registration_link) {
-      return (
-        <Button disabled className="w-full mt-5 bg-accent/50 text-white font-bold py-3 rounded-lg">
-          {text}
-        </Button>
-      );
-    }
-
-    return (
-      <a href={tournament.registration_link} target="_blank" rel="noopener noreferrer" className="block">
-        <Button className="w-full mt-5 bg-accent hover:bg-accent/80 text-white font-bold py-3 rounded-lg transition-transform hover:scale-105">
-          {text}
-        </Button>
-      </a>
-    );
-  };
-  
   return (
-    <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="sm:max-w-[800px] p-0 overflow-hidden border-gray-700/50 bg-[#1a1c20] text-white font-chakra">
-        <div className="relative w-full h-60 md:h-80">
-          <img
-            src={tournament.image}
-            alt={tournament.title}
-            className="w-full h-full object-cover"
-          />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#1a1c20] to-transparent" />
-          {getStatusBadge()}
-          <div className="absolute bottom-0 left-0 p-6 z-10">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-1">
-              {tournament.title}
-            </h2>
-            <p className="text-lg text-gray-400">{tournament.category}</p>
+    <div 
+      className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center p-4 overflow-y-auto"
+      onClick={onClose}
+    >
+      <div 
+        className="bg-[#1a1c20] rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col"
+        onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside the modal
+      >
+        {/* Modal Header */}
+        <div className="relative">
+          <img src={tournament.image} alt={tournament.title} className="w-full h-48 object-cover rounded-t-lg" />
+          <button 
+            onClick={onClose} 
+            className="absolute top-4 right-4 bg-gray-800 bg-opacity-50 rounded-full p-2 text-white hover:bg-opacity-75 transition"
+          >
+            <X size={24} />
+          </button>
+          <div className="absolute bottom-0 left-0 p-4 bg-gradient-to-t from-black to-transparent w-full">
+            <h2 className="text-3xl font-bold text-white">{tournament.title}</h2>
+            <span className="text-sm bg-accent text-black font-bold px-2 py-1 rounded">{tournament.category}</span>
           </div>
         </div>
-
-        <div className="p-6 md:p-8 grid md:grid-cols-2 gap-8">
-          {/* Details Section */}
-          <div className="space-y-6">
-            <div className="flex items-center text-white">
-              <Trophy className="h-5 w-5 mr-4 text-accent" />
-              <div>
-                <span className="font-semibold text-xl">{tournament.prizePool}</span>
-                <span className="text-gray-400 ml-2 text-sm">- Prize Pool</span>
-              </div>
+        
+        {/* Modal Content - Make this area scrollable */}
+        <div className="p-6 overflow-y-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 text-sm">
+            <div className="flex items-center space-x-2">
+              <Calendar className="text-accent" size={20} />
+              <span>Starts: {formatDate(tournament.tournament_start_date)}</span>
             </div>
-            
-            <div className="flex items-center text-white">
-              <Calendar className="h-5 w-5 mr-4 text-accent" />
-              <div>
-                <p className="font-semibold text-xl">
-                    {tournament.startDate}
-                </p>
-                <p className="text-gray-400 text-sm">Start Date</p>
-              </div>
+            <div className="flex items-center space-x-2">
+              <MapPin className="text-accent" size={20} />
+              <span>Location: {tournament.location || 'Online'}</span>
             </div>
-
-            {tournament.location && (
-              <div className="flex items-center text-white">
-                <MapPin className="h-5 w-5 mr-4 text-accent" />
-                <div>
-                    <p className="font-semibold text-xl">{tournament.location}</p>
-                    <p className="text-gray-400 text-sm">Location</p>
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Registration/CTA Section */}
-          <div className="flex flex-col justify-end">
-            <DialogDescription className="text-gray-400 mb-6">
-              Full details about the tournament, including rules, schedule, and team information, are available below.
-            </DialogDescription>
-            {getCtaButton()}
+          <div className="space-y-4">
+            <div>
+              <h3 className="font-bold text-lg mb-2 text-accent">Prize Pool</h3>
+              <p className="text-gray-300 text-2xl font-bold">{tournament.prizePool}</p>
+            </div>
+            <div>
+              <h3 className="font-bold text-lg mb-2 text-accent">Registration</h3>
+              <p className="text-gray-300">
+                Opens: {formatDate(tournament.registration_start_date)}
+              </p>
+              <p className="text-gray-300">
+                Closes: {formatDate(tournament.registration_end_date)}
+              </p>
+            </div>
+             <div>
+              <h3 className="font-bold text-lg mb-2 text-accent">Tournament Schedule</h3>
+              <p className="text-gray-300">
+                Start Date: {formatDate(tournament.tournament_start_date)}
+              </p>
+              <p className="text-gray-300">
+                End Date: {formatDate(tournament.tournament_end_date)}
+              </p>
+            </div>
           </div>
         </div>
 
-        {/* New Tabbed Section for Detailed Content */}
-        <div className="p-6 md:p-8 pt-0">
-          <Tabs defaultValue="overview" className="w-full">
-            <TabsList className="grid w-full grid-cols-3 bg-[#1a1c20] border-t border-gray-700/50">
-              <TabsTrigger value="overview" className="flex items-center gap-2 text-white/60 data-[state=active]:text-accent data-[state=active]:bg-[#2c2f35]">
-                <AlignLeft className="w-4 h-4" />
-                Overview
-              </TabsTrigger>
-              <TabsTrigger value="schedule" className="flex items-center gap-2 text-white/60 data-[state=active]:text-accent data-[state=active]:bg-[#2c2f35]">
-                <Calendar className="w-4 h-4" />
-                Schedule
-              </TabsTrigger>
-              <TabsTrigger value="rules" className="flex items-center gap-2 text-white/60 data-[state=active]:text-accent data-[state=active]:bg-[#2c2f35]">
-                <Newspaper className="w-4 h-4" />
-                Rules
-              </TabsTrigger>
-            </TabsList>
-            <TabsContent value="overview" className="mt-4 text-gray-400">
-              <p>{detailedTournamentInfo.overview}</p>
-            </TabsContent>
-            <TabsContent value="schedule" className="mt-4">
-              <ul className="space-y-4">
-                {detailedTournamentInfo.schedule.map((item, index) => (
-                  <li key={index} className="flex items-center justify-between border-b border-gray-700/50 pb-2">
-                    <div>
-                      <h4 className="font-bold text-white">{item.event}</h4>
-                      <p className="text-gray-400 text-sm">{item.date}</p>
-                    </div>
-                    <span className="text-accent font-semibold">{item.time}</span>
-                  </li>
-                ))}
-              </ul>
-            </TabsContent>
-            <TabsContent value="rules" className="mt-4">
-              <ul className="list-disc list-inside space-y-2 text-gray-400">
-                {detailedTournamentInfo.rules.map((rule, index) => (
-                  <li key={index}>{rule}</li>
-                ))}
-              </ul>
-            </TabsContent>
-          </Tabs>
+        {/* Modal Footer */}
+        <div className="p-6 border-t border-gray-700 mt-auto">
+          {tournament.registration_link ? (
+            <a 
+              href={tournament.registration_link} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="w-full bg-accent text-black font-bold py-3 px-4 rounded-lg flex items-center justify-center hover:bg-accent/50 transition-colors"
+            >
+              Register Now <ExternalLink className="ml-2" size={20} />
+            </a>
+          ) : (
+            <button 
+              disabled
+              className="w-full bg-gray-600 text-white font-bold py-3 px-4 rounded-lg cursor-not-allowed"
+            >
+              Registration Not Available
+            </button>
+          )}
         </div>
-      </DialogContent>
-    </Dialog>
+      </div>
+    </div>
   );
 };
 

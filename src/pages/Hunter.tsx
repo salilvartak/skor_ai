@@ -6,6 +6,7 @@ import TournamentRow from '@/components/TournamentRow';
 import Sidebar from '@/components/sidebar';
 import TournamentModal from '@/components/TournamentModal'; // Ensure this is imported
 import { trendingTournaments as trendingData } from '@/data/tournaments';
+import Footer from '@/components/footer';
 
 // Defines the structure of a tournament object
 interface Tournament {
@@ -220,6 +221,7 @@ const Index = () => {
           onClose={handleCloseModal}
         />
       )}
+      <Footer />
     </div>
   );
 };

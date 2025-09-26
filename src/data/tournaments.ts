@@ -12,82 +12,130 @@ export interface Tournament {
   status: 'live' | 'upcoming' | 'registration' | 'ended';
   startDate?: string;
   duration?: string;
-  registration_link?: string; // Added registration_link
+  registration_link?: string;
 }
 
+// Data based on the esports calendar around September 2025
 export const trendingTournaments: Tournament[] = [
   {
     id: 'trending-1',
-    title: 'VCT Pacific Masters',
-    image: tournament1,
+    title: 'Valorant Champions 2025',
+    image: "/assets/vct.jpg",
     category: 'VALORANT',
-    prizePool: '$250,000',
+    prizePool: '$2,250,000',
     participants: 16,
     status: 'live',
-    startDate: 'Jan 15, 2024',
-    duration: '5 days',
-    registration_link: '#' // Added placeholder link
+    startDate: 'Sep 15, 2025',
+    duration: '12 days',
+    registration_link: 'https://valorantesports.com/'
   },
   {
     id: 'trending-2',
-    title: 'CS2 Major Championship',
-    image: tournament2,
+    title: 'IEM Rio 2025',
+    image: "/assets/CS2.jpg",
     category: 'CS2',
-    prizePool: '$500,000',
-    participants: 24,
+    prizePool: '$250,000',
+    participants: 16,
     status: 'upcoming',
-    startDate: 'Jan 20, 2024',
+    startDate: 'Oct 10, 2025',
     duration: '7 days',
-    registration_link: '#' // Added placeholder link
+    registration_link: 'https://pro.eslgaming.com/cs/'
   },
   {
     id: 'trending-3',
-    title: 'Apex Legends Global Series',
-    image: tournament3,
+    title: 'ALGS Year 6: Split 1 Pro League',
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPP7Dkw-uADGy0qyCaSb1jfA0ROrj-8RlKtg&s",
     category: 'Apex Legends',
-    prizePool: '$300,000',
-    participants: 32,
+    prizePool: '$500,000',
+    participants: 30,
     status: 'registration',
-    startDate: 'Jan 25, 2024',
-    duration: '3 days',
-    registration_link: '#' // Added placeholder link
+    startDate: 'Oct 5, 2025',
+    duration: '5 weeks',
+    registration_link: 'https://www.ea.com/games/apex-legends/compete'
   },
   {
     id: 'trending-4',
-    title: 'Overwatch Champions Cup',
-    image: tournament1,
-    category: 'Overwatch 2',
-    prizePool: '$150,000',
-    participants: 20,
-    status: 'upcoming',
-    startDate: 'Feb 1, 2024',
-    duration: '4 days',
-    registration_link: '#' // Added placeholder link
+    title: 'BATTLEGROUNDS MOBILE INDIA SERIES (BGIS) 2025',
+    image: "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg",
+    category: 'BGMI',
+    prizePool: '₹2,00,00,000',
+    participants: 2000,
+    status: 'registration',
+    startDate: 'Oct 1, 2025',
+    duration: '2 months',
+    registration_link: 'https://www.battlegroundsmobileindia.com/esports'
   },
   {
     id: 'trending-5',
-    title: 'Rocket League World Championship',
-    image: tournament2,
-    category: 'Rocket League',
-    prizePool: '$400,000',
-    participants: 16,
-    status: 'registration',
-    startDate: 'Feb 5, 2024',
-    duration: '6 days',
-    registration_link: '#' // Added placeholder link
+    title: 'Perfect World Shanghai Major 2025',
+    image: "/assets/CS2.jpg",
+    category: 'CS2',
+    prizePool: '$1,250,000',
+    participants: 24,
+    status: 'upcoming',
+    startDate: 'Dec 1, 2025',
+    duration: '14 days',
+    registration_link: 'https://pglesports.com/'
   },
   {
     id: 'trending-6',
-    title: 'League of Legends Masters',
-    image: tournament3,
-    category: 'League of Legends',
-    prizePool: '$750,000',
-    participants: 12,
+    title: 'VCT Game Changers Championship 2025',
+    image: "/assets/vct.jpg",
+    category: 'VALORANT',
+    prizePool: '$500,000',
+    participants: 8,
     status: 'upcoming',
-    startDate: 'Feb 10, 2024',
-    duration: '8 days',
-    registration_link: '#' // Added placeholder link
+    startDate: 'Nov 15, 2025',
+    duration: '6 days',
+    registration_link: 'https://valorantesports.com/news/game-changers'
+  },
+  {
+    id: 'trending-7',
+    title: 'ALGS Year 6: Split 2 Playoffs',
+    image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPP7Dkw-uADGy0qyCaSb1jfA0ROrj-8RlKtg&s",
+    category: 'Apex Legends',
+    prizePool: '$1,000,000',
+    participants: 40,
+    status: 'upcoming',
+    startDate: 'Jan 15, 2026',
+    duration: '4 days',
+    registration_link: 'https://www.ea.com/games/apex-legends/compete'
+  },
+  {
+    id: 'trending-8',
+    title: 'BATTLEGROUNDS MOBILE INDIA PRO SERIES (BMPS) 2025',
+    image: "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg",
+    category: 'BGMI',
+    prizePool: '₹1,00,00,000',
+    participants: 16,
+    status: 'upcoming',
+    startDate: 'Nov 20, 2025',
+    duration: '3 weeks',
+    registration_link: 'https://www.battlegroundsmobileindia.com/esports'
+  },
+  {
+    id: 'trending-9',
+    title: 'BLAST Premier World Final 2025',
+    image: "/assets/CS2.jpg",
+    category: 'CS2',
+    prizePool: '$1,000,000',
+    participants: 8,
+    status: 'upcoming',
+    startDate: 'Dec 13, 2025',
+    duration: '5 days',
+    registration_link: 'https://blast.tv/premier'
+  },
+  {
+    id: 'trending-10',
+    title: 'Red Bull Home Ground 2025',
+    image: "/assets/vct.jpg",
+    category: 'VALORANT',
+    prizePool: '$100,000',
+    participants: 8,
+    status: 'upcoming',
+    startDate: 'Oct 25, 2025',
+    duration: '3 days',
+    registration_link: 'https://www.redbull.com/int-en/event-series/home-ground'
   }
 ];
 
-// ... (rest of the file remains the same)
