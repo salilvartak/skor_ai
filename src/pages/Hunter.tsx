@@ -27,12 +27,39 @@ interface Tournament {
   tournament_location?: string;
 }
 
+const getGameName = (gameId: number) => {
+  switch (gameId) {
+    case 2:
+      return "BGMI";
+    case 3:
+      return "CS2";
+    case 4:
+      return "Valorant";
+    default:
+      return `Game ID: ${gameId}`;
+  }
+};
+
+const getGameImage = (gameId: number) => {
+  switch (gameId) {
+    case 2:
+      return "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg";
+    case 3:
+      return "/assets/CS2.jpg";
+    case 4:
+      return "/assets/vct.jpg";
+    default:
+      return "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg"; // Default image
+  }
+};
+
 const Index = () => {
   // State for managing tournament data
   const [trendingTournaments, setTrendingTournaments] = useState<Tournament[]>(trendingData);
   const [liveTournaments, setLiveTournaments] = useState<Tournament[]>([]);
-  const [upcomingTournaments, setUpcomingTournaments] = useState<Tournament[]>([]);
-  const [registrationLive, setRegistrationLive] = useState<Tournament[]>([]);
+  const [cs2Tournaments, setCs2Tournaments] = useState<Tournament[]>([]);
+  const [valorantTournaments, setValorantTournaments] = useState<Tournament[]>([]);
+  const [bgmiTournaments, setBgmiTournaments] = useState<Tournament[]>([]);
   
   // State for loading and error UI
   const [loading, setLoading] = useState(true);
@@ -79,15 +106,16 @@ const Index = () => {
 
         const now = new Date();
         const live: Tournament[] = [];
-        const upcoming: Tournament[] = [];
-        const regLive: Tournament[] = [];
+        const cs2: Tournament[] = [];
+        const valorant: Tournament[] = [];
+        const bgmi: Tournament[] = [];
 
         data.forEach((t: any) => {
           const tournament: Tournament = {
             id: t.id.toString(),
             title: t.tournament_name,
-            image: "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg",
-            category: t.game_id_id === 2 ? "BGMI" : `Game ID: ${t.game_id_id}`,
+            image: getGameImage(t.game_id),
+            category: getGameName(t.game_id),
             prizePool: `${t.prize_pool_currency} ${t.prize_pool.toLocaleString()}`,
             participants: 0, 
             status: "upcoming",
@@ -104,26 +132,29 @@ const Index = () => {
 
           const startDate = new Date(tournament.tournament_start_date!);
           const endDate = new Date(tournament.tournament_end_date!);
-          const regStartDate = new Date(tournament.registration_start_date!);
-          const regEndDate = new Date(tournament.registration_end_date!);
-
+          
           if (now >= startDate && now <= endDate) {
             tournament.status = "live";
             live.push(tournament);
-          } else if (now < startDate) {
-            tournament.status = "upcoming";
-            upcoming.push(tournament);
           }
 
-          if (now >= regStartDate && now <= regEndDate) {
-            tournament.status = "registration";
-            regLive.push(tournament);
+          switch (t.game_id) {
+            case 2:
+              bgmi.push(tournament);
+              break;
+            case 3:
+              cs2.push(tournament);
+              break;
+            case 4:
+              valorant.push(tournament);
+              break;
           }
         });
         
         setLiveTournaments(live);
-        setUpcomingTournaments(upcoming);
-        setRegistrationLive(regLive);
+        setCs2Tournaments(cs2);
+        setValorantTournaments(valorant);
+        setBgmiTournaments(bgmi);
         
       } catch (error: any) {
         console.error("Error fetching tournaments:", error);
@@ -151,19 +182,12 @@ const Index = () => {
     }
 
     return (
-        <>
-            <TournamentRow title="Live Now" tournaments={liveTournaments} onCardClick={handleCardClick} />
-            <TournamentRow
-                title="Upcoming Events"
-                tournaments={upcomingTournaments}
-                onCardClick={handleCardClick}
-            />
-            <TournamentRow
-                title="Registration Live"
-                tournaments={registrationLive}
-                onCardClick={handleCardClick}
-            />
-        </>
+      <>
+        <TournamentRow title="Live Now" tournaments={liveTournaments} onCardClick={handleCardClick} />
+        <TournamentRow title="CS2" tournaments={cs2Tournaments} onCardClick={handleCardClick} />
+        <TournamentRow title="Valorant" tournaments={valorantTournaments} onCardClick={handleCardClick} />
+        <TournamentRow title="BGMI" tournaments={bgmiTournaments} onCardClick={handleCardClick} />
+      </>
     );
   };
 
@@ -172,7 +196,7 @@ const Index = () => {
       <Sidebar />
       <Header 
         liveTournaments={liveTournaments}
-        upcomingTournaments={upcomingTournaments}
+        upcomingTournaments={[]}
         trendingTournaments={trendingTournaments}
       />
       <main className="pt-0">
