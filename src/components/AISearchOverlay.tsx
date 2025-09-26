@@ -39,6 +39,7 @@ const AISearchOverlay = ({
     "Upcoming BGMI tournaments",
     "Trending Tournaments",
     "Live tournaments right now",
+    "Tournaments under $50,000",
   ];
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -55,18 +56,31 @@ const AISearchOverlay = ({
     // Simulates a network delay for a better user experience
     setTimeout(() => {
       let results: Tournament[] = [];
-      switch (searchQuery) {
-        case "Upcoming BGMI tournaments":
-          results = upcomingTournaments.filter(t => t.category === "BGMI");
-          break;
-        case "Trending Tournaments":
-          results = trendingTournaments;
-          break;
-        case "Live tournaments right now":
-          results = liveTournaments;
-          break;
-        default:
-          results = [];
+      const lowerCaseQuery = searchQuery.toLowerCase();
+
+      // Scenarios for "tournaments under 50,000"
+      if (lowerCaseQuery.includes('under 50k') || lowerCaseQuery.includes('< 50000') || lowerCaseQuery.includes('less than 50000') || lowerCaseQuery.includes('under 50000')) {
+        const allTournaments = [...liveTournaments, ...upcomingTournaments];
+        results = allTournaments.filter(t => {
+            const prizePoolValue = parseInt(t.prizePool.replace(/[^0-9]/g, ''));
+            return prizePoolValue < 50000;
+        });
+      } else {
+        // Existing search cases
+        switch (lowerCaseQuery) {
+          case "upcoming bgmi tournaments":
+            results = upcomingTournaments.filter(t => t.category === "BGMI");
+            break;
+          case "trending tournaments":
+            results = trendingTournaments;
+            break;
+          case "live tournaments right now":
+            results = liveTournaments;
+            break;
+          default:
+            results = [];
+            break;
+        }
       }
       setSearchResults(results);
       setIsLoading(false);
