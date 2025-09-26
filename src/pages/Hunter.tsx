@@ -36,6 +36,8 @@ const getGameName = (gameId: number) => {
       return "CS2";
     case 4:
       return "Valorant";
+    case 5:
+      return "Dota 2";
     default:
       return `Game ID: ${gameId}`;
   }
@@ -49,6 +51,8 @@ const getGameImage = (gameId: number) => {
       return "/assets/CS2.jpg";
     case 4:
       return "/assets/vct.jpg";
+    case 5:
+      return "https://shared.akamai.steamstatic.com/store_item_assets/steam/apps/570/capsule_616x353.jpg?t=1757000652";
     default:
       return "https://images.wallpapersden.com/image/download/pubg-mobile-season-15_bGhmZ2iUmZqaraWkpJRpZWVlrWdnamY.jpg"; // Default image
   }
@@ -61,6 +65,7 @@ const Index = () => {
   const [cs2Tournaments, setCs2Tournaments] = useState<Tournament[]>([]);
   const [valorantTournaments, setValorantTournaments] = useState<Tournament[]>([]);
   const [bgmiTournaments, setBgmiTournaments] = useState<Tournament[]>([]);
+  const [dota2Tournaments, setDota2Tournaments] = useState<Tournament[]>([]);
   
   // State for loading and error UI
   const [loading, setLoading] = useState(true);
@@ -110,6 +115,7 @@ const Index = () => {
         const cs2: Tournament[] = [];
         const valorant: Tournament[] = [];
         const bgmi: Tournament[] = [];
+        const dota2: Tournament[] = [];
 
         data.forEach((t: any) => {
           const tournament: Tournament = {
@@ -149,6 +155,9 @@ const Index = () => {
             case 4:
               valorant.push(tournament);
               break;
+            case 5:
+              dota2.push(tournament);
+              break;
           }
         });
         
@@ -156,6 +165,7 @@ const Index = () => {
         setCs2Tournaments(cs2);
         setValorantTournaments(valorant);
         setBgmiTournaments(bgmi);
+        setDota2Tournaments(dota2);
         
       } catch (error: any) {
         console.error("Error fetching tournaments:", error);
@@ -188,6 +198,7 @@ const Index = () => {
         <TournamentRow title="CS2" tournaments={cs2Tournaments} onCardClick={handleCardClick} />
         <TournamentRow title="Valorant" tournaments={valorantTournaments} onCardClick={handleCardClick} />
         <TournamentRow title="BGMI" tournaments={bgmiTournaments} onCardClick={handleCardClick} />
+        <TournamentRow title="Dota 2" tournaments={dota2Tournaments} onCardClick={handleCardClick} />
       </>
     );
   };

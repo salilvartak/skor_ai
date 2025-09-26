@@ -34,6 +34,7 @@ const AISearchOverlay = ({
   const [query, setQuery] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [searchResults, setSearchResults] = useState<Tournament[]>([]);
+  const hasResults = searchResults.length > 0;
 
   const suggestions = [
     "Upcoming BGMI tournaments",
@@ -123,16 +124,17 @@ const AISearchOverlay = ({
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: '-20%', opacity: 0 }}
             transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            className="w-full h-full pt-16 px-4"
+            // ✨ Change 1: Layout is now conditional. It centers content when there are no results.
+            className={`w-full h-full ${hasResults ? 'pt-16' : 'flex items-center justify-center'}`}
             onClick={(e) => e.stopPropagation()}
           >
-            <div className="max-w-6xl mx-auto">
+            {/* ✨ Change 2: Container also adapts based on whether there are results. */}
+            <div className={`w-full max-w-6xl mx-auto px-4 ${hasResults ? 'h-full flex flex-col' : ''}`}>
                 <div className="relative">
                 <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
                 <input
                     type="text"
                     value={query}
-                    // This line has been corrected
                     onChange={(e) => setQuery(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleSearch(query)}
                     placeholder="Ask about any tournament..."
@@ -144,12 +146,13 @@ const AISearchOverlay = ({
                 </button>
                 </div>
 
-                {/* Suggestions & Results */}
-                <div className="mt-6 text-white">
-                    {searchResults.length === 0 && !isLoading && (
+                {/* Suggestions & Results Area */}
+                <div className={`text-white mt-6 ${hasResults ? 'flex-1 min-h-0 overflow-y-auto pb-16 scrollbar-thin scrollbar-track-transparent scrollbar-thumb-accent' : ''}`}>
+                    {!hasResults && !isLoading && (
                         <>
-                            <h3 className="text-sm font-semibold text-gray-400">Suggestions</h3>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                            <h3 className="text-sm font-semibold text-gray-400 text-center">Suggestions</h3>
+                            {/* ✨ Change 3: Replaced grid with flex-wrap for self-sizing suggestion boxes. */}
+                            <div className="flex flex-wrap justify-center gap-3 mt-3">
                                 {suggestions.map((item) => (
                                     <button
                                     key={item}
@@ -165,7 +168,7 @@ const AISearchOverlay = ({
 
                     {isLoading && <p className="text-center">Searching...</p>}
 
-                    {searchResults.length > 0 && (
+                    {hasResults && (
                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                             {searchResults.map(tournament => (
                                 <TournamentCard key={tournament.id} tournament={tournament} />

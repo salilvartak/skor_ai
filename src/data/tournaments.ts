@@ -34,7 +34,7 @@ export const trendingTournaments: Tournament[] = [
     title: 'IEM Rio 2025',
     image: "/assets/CS2.jpg",
     category: 'CS2',
-    prizePool: '$250,000',
+    prizePool: '$20,000',
     participants: 16,
     status: 'upcoming',
     startDate: 'Oct 10, 2025',

@@ -76,11 +76,7 @@ const CouponsAndGiftCards = () => {
 
         {/* Main Content */}
         <main className="flex-1 p-6 space-y-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card className="bg-white/5 border-white/10 h-64" />
-            <Card className="bg-white/5 border-white/10 h-64" />
-            <Card className="bg-white/5 border-white/10 h-64" />
-          </div>
+          
 
           <div className="space-y-4">
             <div className="flex items-center justify-between">
