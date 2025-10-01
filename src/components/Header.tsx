@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Search, Bell, User, Menu } from 'lucide-react';
+import { Search, Bell, User, Menu,Settings } from 'lucide-react';
 import AISearchOverlay from './AISearchOverlay';
 import { ProfileOverlay } from './ProfileOverlay'; // Import the new component
 import { auth } from '@/firebase'; // Import auth
@@ -85,7 +85,7 @@ export const Header = ({ liveTournaments = [], upcomingTournaments = [], trendin
 
             {/* User Profile */}
             <Button variant="ghost" size="icon" className="hover:bg-accent/80" onClick={() => setIsProfileOpen(true)}>
-              <User className="h-5 w-5 text-white" />
+              <Settings className="h-5 w-5 text-white" />
             </Button>
 
             {/* Mobile Menu */}

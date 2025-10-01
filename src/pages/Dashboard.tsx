@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Home,
   Brain,
@@ -17,15 +17,10 @@ import { auth, db } from "@/firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import {
-  Bell,
-  Swords,
-  Users,
-  Gamepad,
-  History,
-  TrendingUp,
-} from 'lucide-react';
 import NotificationsTab from '@/components/NotificationsTab';
+import AISearchOverlay from '@/components/AISearchOverlay';
+import { ProfileOverlay } from '@/components/ProfileOverlay';
+import { Button } from "@/components/ui/button";
 
 export default function Dashboard() {
   const [price, setPrice] = useState<string>("-");
@@ -33,8 +28,8 @@ export default function Dashboard() {
   const [loading, setLoading] = useState<boolean>(true);
   const [user, setUser] = useState<FirebaseUser | null>(null);
   const navigate = useNavigate();
-
-  // Removed timeSpent state and related useEffects
+  const [isSearchOpen, setIsSearchOpen] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
 
   useEffect(() => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -43,8 +38,6 @@ export default function Dashboard() {
     return () => unsubscribe();
   }, []);
 
-  // Removed useEffect for fetching and saving timeSpent
-
   const handleLogout = async () => {
     try {
       if (user) {
@@ -52,6 +45,7 @@ export default function Dashboard() {
         await updateDoc(userDocRef, { lastOnline: Date.now() });
       }
       await signOut(auth);
+      setIsProfileOpen(false); // Close profile overlay on logout
       navigate("/");
     } catch (error) {
       console.error("Error signing out:", error);
@@ -105,20 +99,20 @@ export default function Dashboard() {
     const fetchPriceData = async () => {
       try {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/coins/skor-ai/market-chart?vs_currency=usd&days=30"
+          "https://api.coingecko.com/api/v3/simple/price?ids=skor-ai&vs_currencies=usd&include_24hr_change=true"
         );
         const data = await response.json();
-        const prices = data.prices;
-        if (!Array.isArray(prices) || prices.length < 2) {
-          throw new Error("Insufficient price data");
+        const skorData = data['skor-ai'];
+
+        if (skorData && skorData.usd) {
+          setPrice(skorData.usd.toFixed(4));
+          const change = skorData.usd_24h_change;
+          setPctChange(
+            change >= 0 ? `+${change.toFixed(2)}%` : `${change.toFixed(2)}%`
+          );
+        } else {
+          throw new Error("Price data not found for skor-ai");
         }
-        const startPrice = prices[0][1];
-        const latestPrice = prices[prices.length - 1][1];
-        const priceChange = ((latestPrice - startPrice) / startPrice) * 100;
-        setPrice(latestPrice.toFixed(4));
-        setPctChange(
-          priceChange >= 0 ? `+${priceChange.toFixed(2)}%` : `${priceChange.toFixed(2)}%`
-        );
       } catch (error) {
         console.error("Error fetching price data:", error);
         setPrice("N/A");
@@ -175,35 +169,28 @@ export default function Dashboard() {
             </span>
           </div>
           <div className="relative group">
-            <Link to="/labs" className="flex flex-col items-center gap-1">
-              <Box className="w-6 h-6 text-gray-400 group-hover:text-accent transition-colors" />
-            </Link>
+            <div className="flex flex-col items-center gap-1 cursor-not-allowed opacity-50">
+              <Box className="w-6 h-6 text-gray-400" />
+            </div>
             <span className="absolute -top-full mt-0 left-1/2 -translate-x-1/2 rounded-full bg-white/10 text-white text-sm whitespace-nowrap px-3 py-1 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
-              Labs
+              Coming Soon
             </span>
           </div>
           <div className="relative group">
-            <Link to="/analytics" className="flex flex-col items-center gap-1">
-              <BarChart2 className="w-6 h-6 text-gray-400 group-hover:text-accent transition-colors" />
-            </Link>
+            <div className="flex flex-col items-center gap-1 cursor-not-allowed opacity-50">
+              <BarChart2 className="w-6 h-6 text-gray-400" />
+            </div>
             <span className="absolute -top-full mt-0 left-1/2 -translate-x-1/2 rounded-full bg-white/10 text-white text-sm whitespace-nowrap px-3 py-1 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
-              Analytics
+              Coming Soon
             </span>
           </div>
         </div>
         <div className="mt-auto flex flex-col items-center gap-8">
+          
           <div className="relative group">
-            <Link to="/profile" className="flex flex-col items-center gap-1">
-              <User className="w-6 h-6 text-gray-400 group-hover:text-accent transition-colors" />
-            </Link>
-            <span className="absolute -top-full mt-0 left-1/2 -translate-x-1/2 rounded-full bg-white/10 text-white text-sm whitespace-nowrap px-3 py-1 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
-              Profile
-            </span>
-          </div>
-          <div className="relative group">
-            <Link to="/settings" className="flex flex-col items-center gap-1">
+            <button onClick={() => setIsProfileOpen(true)} className="flex flex-col items-center gap-1">
               <Settings className="w-6 h-6 text-gray-400 group-hover:text-accent transition-colors" />
-            </Link>
+            </button>
             <span className="absolute -top-full mt-0 left-1/2 -translate-x-1/2 rounded-full bg-white/10 text-white text-sm whitespace-nowrap px-3 py-1 invisible opacity-0 group-hover:visible group-hover:opacity-100 transition-all duration-200">
               Settings
             </span>
@@ -228,16 +215,14 @@ export default function Dashboard() {
           <h1 className="text-xl font-bold font-chakra text-white">
             Ready to Play, <span className="text-accent">{user?.displayName || "Player"}</span>
           </h1>
-          <div className="relative w-full max-w-xs ">
-            <Search
-              className="absolute left-3 top-1/2 -translate-y-1/2 text-orange-400 w-5 h-5 z-20 pointer-events-none"
-            />
-            <input
-              type="search"
-              placeholder="Search..."
-              className="w-full pl-10 pr-4 py-2 rounded-full bg-gray-800/40 backdrop-blur-md text-sm text-white placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400 transition z-10"
-            />
-          </div>
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => setIsSearchOpen(true)}
+            className="hover:bg-accent/80"
+          >
+            <Search className="h-5 w-5 text-white" />
+          </Button>
         </header>
 
         <section className="grid grid-cols-3 gap-6 items-stretch">
@@ -278,34 +263,29 @@ export default function Dashboard() {
               </div>
             </div>
             <section className="bg-white/10 backdrop-blur-md rounded-2xl p-4 grid grid-cols-[auto_1fr] gap-8">
-              <CalendarSync className="text-accent w-28 h-28" />
+              <CalendarSync className="text-accent w-24 h-24" />
               <div>
                 <h4 className="text-accent0 text-lg text-white font-semibold font-chakra">
-                  New Update for Agent Precision
+                  Beta For Agent Hunter is Live!
                 </h4>
                 <h4 className="text-accent mb-1 text-md font-chakra">
-                  Version: 0.4
+                  Version: 0.4 - October 2025
                 </h4>
                 <ul className="list-disc list-inside text-sm text-gray-300 space-y-1 font-chakra">
-                  <li>Multi-Platform Data Scraping Enhancements
+                  <li>Authentication Options
                     <ul className="list-disc list-inside ml-4">
-                      <li className="ml-4">Added Instagram Story and Reel metadata extraction via Puppeteer with dynamic rendering support.</li>
-                      <li className="ml-4">Integrated Discord channel scraping with automatic rate-limit handling.</li>
-                      <li className="ml-4">Expanded Liquipedia parser to support additional tournament formats and region filters.</li>
+                      <li className="ml-4">Added OAuth login support with Google.</li>
+                      <li className="ml-4">Introduced traditional email/password signup and login flow.</li>
+                      
                     </ul>
                   </li>
-                  <li>Tournament Ranking Engine v2
+                  <li>Tournament Data Coverage Upgrade
                     <ul className="list-disc list-inside ml-4">
-                      <li className="ml-4">Introduced weighted scoring based on user-selected criteria (e.g., prize pool, player tier, event prestige).</li>
-                      <li className="ml-4">Added AI-powered ranking explanation so users can see why a tournament placed in the Top 5.</li>
+                      <li className="ml-4">Expanded data ingestion pipeline to aggregate tournaments from 150+ verified sources.</li>
+                      <li className="ml-4">Increased redundancy checks to eliminate duplicate tournament entries across sources.</li>
                     </ul>
                   </li>
-                  <li>Frontend Dashboard Improvements
-                    <ul className="list-disc list-inside ml-4">
-                      <li className="ml-4">New interactive filters for region, game title, and tournament type.</li>
-                      <li className="ml-4">Implemented real-time updates when new tournaments are found.</li>
-                    </ul>
-                  </li>
+                  
                 </ul>
               </div>
             </section>
@@ -333,7 +313,6 @@ export default function Dashboard() {
               )}
             </div>
             
-            {/* Notifications Tab is now here */}
             <NotificationsTab />
 
           </div>
@@ -342,16 +321,30 @@ export default function Dashboard() {
 
       <aside className="fixed top-4 bottom-4 right-4 w-20 flex flex-col items-center py-6 gap-4 rounded-3xl bg-black/40 backdrop-blur-md z-10">
         {user && (
-          <Link to="/profile">
+          <button onClick={() => setIsProfileOpen(true)} className="focus:outline-none rounded-full">
             <Avatar className="w-12 h-12 border-2 border-accent">
               <AvatarImage src={user.photoURL || undefined} alt={user.displayName || "User"} />
               <AvatarFallback className="bg-accent text-white text-xl">
                 {getUserInitials(user.displayName)}
               </AvatarFallback>
             </Avatar>
-          </Link>
+          </button>
         )}
       </aside>
+
+      {/* AI Search and Profile Overlays */}
+      <AISearchOverlay
+        isOpen={isSearchOpen}
+        onClose={() => setIsSearchOpen(false)}
+        liveTournaments={[]}
+        upcomingTournaments={[]}
+        trendingTournaments={[]}
+      />
+      <ProfileOverlay
+        isOpen={isProfileOpen}
+        onClose={() => setIsProfileOpen(false)}
+        onLogout={handleLogout}
+      />
     </div>
   );
 }
